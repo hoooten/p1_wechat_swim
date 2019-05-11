@@ -1,42 +1,131 @@
 <template>
   <div id="app">
+    <head-bar
+      :title="title"
+      :back-type="urlName ? 'blue' : 'white'"
+      @on-back="onBack"></head-bar>
+
     <router-view></router-view>
 
-    <tabbar>
-      <tabbar-item @on-item-click="onChangeTab()" :selected="tabIndex === 0" link="/">
-        <img slot="icon" src="/static/images/bottom-tab/icon-location.png">
-        <span slot="label">附近教点</span>
-      </tabbar-item>
-      <tabbar-item @on-item-click="onChangeTab()" :selected="tabIndex === 1" link="/product/introduce">
-        <img slot="icon" src="/static/images/bottom-tab/icon-location.png">
-        <span slot="label">教练资质</span>
-      </tabbar-item>
-      <tabbar-item @on-item-click="onChangeTab()" :selected="tabIndex === 2" link="/">
-        <img slot="icon" src="/static/images/bottom-tab/icon-location.png">
-        <span slot="label">资料下载</span>
-      </tabbar-item>
-    </tabbar>
+    <div v-if="tabName">
+      <tabbar v-if="!module">
+        <tabbar-item :selected="tabName === 'teach_point_nearby'" link="/">
+          <img slot="icon" v-if="tabName === 'teach_point_nearby'" src="/static/images/bottom-tab/icon-location-blue.png">
+          <img slot="icon" v-else src="/static/images/bottom-tab/icon-location-grey.png">
+          <span slot="label">附近教点</span>
+        </tabbar-item>
+        <tabbar-item :selected="tabName === 'coach_qualify'" link="/coach/qualify">
+          <img slot="icon" v-if="tabName === 'coach_qualify'" src="/static/images/bottom-tab/icon-qualify-blue.png">
+          <img slot="icon" v-else src="/static/images/bottom-tab/icon-qualify-grey.png">
+          <span slot="label">教练资质</span>
+        </tabbar-item>
+        <tabbar-item :selected="tabName === 'coach_join'" link="/join">
+          <img slot="icon" v-if="tabName === 'coach_join'" src="/static/images/bottom-tab/icon-join-blue.png">
+          <img slot="icon" v-else src="/static/images/bottom-tab/icon-join-grey.png">
+          <span slot="label">加盟</span>
+        </tabbar-item>
+        <tabbar-item :selected="tabName === 'coach_file_download'" link="/">
+          <img slot="icon" v-if="tabName === 'coach_file_download'" src="/static/images/bottom-tab/icon-cloud-blue.png">
+          <img slot="icon" v-else src="/static/images/bottom-tab/icon-cloud-grey.png">
+          <span slot="label">资料下载</span>
+        </tabbar-item>
+      </tabbar>
+
+      <tabbar v-if="module">
+        <tabbar-item :selected="tabName === 'community_index'" link="/community/index">
+          <img v-if="tabName === 'community_index'" slot="icon" src="/static/images/bottom-tab/icon-index-blue.png">
+          <img v-else slot="icon" src="/static/images/bottom-tab/icon-index-grey.png">
+          <span slot="label">潜泳首页</span>
+        </tabbar-item>
+        <tabbar-item :selected="tabName === 'com_edit'" link="/community/posting">
+          <img v-if="tabName === 'com_edit'" slot="icon" src="/static/images/bottom-tab/icon-edit-blue.png">
+          <img v-else slot="icon" src="/static/images/bottom-tab/icon-edit-grey.png">
+          <span slot="label">发帖</span>
+        </tabbar-item>
+        <tabbar-item :selected="tabName === 'com_center'" link="/community/user-center">
+          <img v-if="tabName === 'com_center'" slot="icon" src="/static/images/bottom-tab/icon-center-blue.png">
+          <img v-else slot="icon" src="/static/images/bottom-tab/icon-center-grey.png">
+          <span slot="label">个人中心</span>
+        </tabbar-item>
+      </tabbar>
+    </div>
   </div>
 </template>
 
 <script>
-  import {Tabbar, TabbarItem, Panel} from 'vux';
+  import {Tabbar, TabbarItem} from 'vux';
+  import {HeadBar} from '@/components';
+  import {WxUtil} from "./utils/wx-util";
 
   export default {
     name: 'app',
     components: {
       Tabbar,
       TabbarItem,
-      Panel,
+      HeadBar,
     },
     data(){
       return {
-        tabIndex: 0,
+        showTab: true,
+        tabName: '',
+        title: '',
+        urlName: '',
+        module: '',
       };
     },
+    watch: {
+      $route(to, from){
+        if(to.meta){
+          this.tabName = to.meta.tabName;
+          this.title = to.meta.title;
+          this.module = to.meta.module;
+          this.urlName = '';
+
+          if(to.meta.urlName){
+            this.urlName = to.meta.urlName;
+          }
+        }
+      },
+    },
+    created(){
+      this.urlName = '';
+      if(this.$route.meta){
+        this.tabName = this.$route.meta.tabName;
+        this.title = this.$route.meta.title;
+        this.module = this.$route.meta.module;
+
+        if(this.$route.meta.urlName){
+          this.urlName = this.$route.meta.urlName;
+        }
+      }
+    },
+    mounted(){
+      WxUtil.getUserLocation();
+      this.$api.loginDemo({userNameOrEmailAddress: 'admin', password: '123qwe'})
+        .then(resp => {
+          if(resp.success){
+            window.localStorage.setItem('token', resp.result.accessToken);
+            window.localStorage.setItem('user_id', resp.result.userId);
+          }
+        });
+    },
     methods: {
-      onChangeTab(index){
-        this.tabIndex = index;
+      onBack(){
+        if(this.urlName){
+          this.$router.push({name: this.urlName});
+        }
+      },
+
+      loginWithWx(){
+        const params = {
+          authProvider: 'Wechat',
+          providerAccessCode: '',
+        };
+
+        this.$api.loginWithWechat()
+          .then(resp => {
+
+          });
       },
     },
   }

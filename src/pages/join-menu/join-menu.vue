@@ -1,22 +1,21 @@
 <template>
   <div>
     <div class="padding-15 border-box grid-box">
-      <router-link to="/" class="block-card bg-blue">我是游泳爱好者</router-link>
-      <router-link to="/coach/join" class="block-card bg-red">我是教练</router-link>
-      <router-link to="/point/join" class="block-card bg-green">我要加盟</router-link>
+      <router-link to="/community/index" class="block-card bg-blue">我是游泳爱好者</router-link>
+      <router-link to="/join/coach" class="block-card bg-red">我是教练</router-link>
+      <router-link to="/join/point" class="block-card bg-green">我要加盟</router-link>
     </div>
   </div>
 </template>
 
 <script>
+
   export default {
-    name: 'index',
+    name: 'main-menu',
   }
 </script>
 
 <style lang="less" scoped>
-  @import '../../assets/styles/color.less';
-
   .grid-box{
     background: #fff;
   }

@@ -89,5 +89,10 @@ module.exports = vuxLoader.merge(webpackConfig, {
         }
       }
     },
+    // 覆盖vux原有的样式变量
+    {
+      name: 'less-theme',
+      path: 'src/assets/styles/theme.less'
+    }
   ]
 })

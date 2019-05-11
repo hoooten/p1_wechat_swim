@@ -47,8 +47,8 @@ const webpackConfig = merge(baseWebpackConfig, {
       // This will result in *all* of your app's CSS being loaded upfront.
       allChunks: false,
     }),
-    // generate dist index.html with correct asset hash for caching.
-    // you can customize output by editing /index.html
+    // generate dist join-menu.html with correct asset hash for caching.
+    // you can customize output by editing /join-menu.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: config.build.index,

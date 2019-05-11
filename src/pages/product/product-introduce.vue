@@ -6,7 +6,7 @@
 
     <div>
       <div class="padding-15 cover-wrp">
-        <img src="https://d2i72ju5buk5xz.cloudfront.net/gsc/VR50M2/03/53/ab/0353ab4f6d7644de86658a02e60f21ea/images/最新发布/u70.png?token=5a5b08e40600684f15cd2d797f4f41a0">
+        <img src="https://d2i72ju5buk5xz.cloudfront.net/gsc/VR50M2/47/61/f7/4761f715e673439fbde38f9140b513ee/images/最新发布/u128.png?token=9806ed8ffbaa8a5e914e5a90b33c65ab">
       </div>
 
       <div class="padding-lr-15 border-box prod-wrp">

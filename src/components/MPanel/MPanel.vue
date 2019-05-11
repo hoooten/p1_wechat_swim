@@ -19,6 +19,7 @@
 </template>
 
 <script>
+
   export default {
     name: 'm-panel',
     props: {
@@ -44,7 +45,7 @@
     methods: {
       onClick(){
         if(this.url){
-          this.$router.push(this.url.name, this.url.q);
+          this.$router.push({name: this.url.name, query: this.url.q});
         }else{
           this.$emit('on-click');
         }

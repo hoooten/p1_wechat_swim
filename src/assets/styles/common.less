@@ -1,5 +1,5 @@
 @import '~vux/src/styles/reset.less';
-@import './color.less';
+@import '~vux/src/styles/1px.less';
 
 body, html{
   overflow-x: hidden;
@@ -7,13 +7,6 @@ body, html{
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   background: #F5F5F5;
   font-size: 14px;
-}
-#app {
-  height: 100%;
-  color: #323232;
-  font-family: "PingFang SC","Hiragino Sans GB","STHeiti","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 input, textarea{
   padding-top: 2px;
@@ -27,7 +20,19 @@ input, textarea{
 button{
   outline: none;
 }
+ul, li{
+  list-style: none;
+}
 
+#app {
+  height: 100%;
+  padding-top: 44px;
+  padding-bottom: 60px;
+  color: #323232;
+  font-family: "PingFang SC","Hiragino Sans GB","STHeiti","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 .margin-bottom-15{
   margin-bottom: 15px;
 }

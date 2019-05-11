@@ -1,0 +1,147 @@
+.title-bar{
+  display: flex;
+  padding: 10px 15px;
+
+  .h-portrait{
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+
+    img{
+      width: 100%;
+      height: 100%;
+      vertical-align: middle;
+    }
+  }
+  .tt-con{
+    flex: 1;
+    margin-left: 12px;
+
+    .nk-name{
+      color: #5a85ce;
+      font-weight: bold;
+      font-size: 15px;
+    }
+    .bt-rw{
+      color: @font-color-grey;
+      font-size: 13px;
+    }
+  }
+}
+
+.content{
+  padding: 0 15px;
+
+  .text{
+    font-size: 15px;
+    line-height: 1.5em;
+
+    h3{
+      font-size: 15px;
+    }
+  }
+  .images{
+    font-size: 0;
+
+    .img-ul li{
+      display: inline-block;
+      width: 32%;
+      margin-bottom: 2%;
+
+      &:nth-of-type(2),
+      &:nth-of-type(5),
+      &:nth-of-type(8){
+        margin: 0 2%;
+      }
+      img{
+        width: 100%;
+        max-height: 104px;
+        vertical-align: middle;
+      }
+    }
+  }
+  .comments{
+    .location{
+      color: #5a85ce;
+      font-size: 13px;
+    }
+    .operation{
+      padding: 6px 0;
+      text-align: right;
+
+      span{
+        display: inline-block;
+        width: 25%;
+        color: @font-color-grey;
+        font-size: 13px;
+        text-align: center;
+      }
+      img{
+        position: relative;
+        top: -2px;
+        width: 16px;
+        height: auto;
+        margin-right: 5px;
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+.operation-log{
+  .support{
+    width: 100%;
+    padding-left: 35px;
+    padding-right: 15px;
+    box-sizing: border-box;
+    background: url("/static/images/components/support.png") no-repeat 15px top;
+    background-size: 16px auto;
+
+    .sup-flag{
+      width: 16px;
+      height: auto;
+      margin-right: 5px;
+      vertical-align: top;
+    }
+    .sup-sp{
+      display: inline-block;
+      width: 36px;
+      height: 36px;
+      margin-bottom: 5px;
+      margin-right: 5px;
+      overflow: hidden;
+      border-radius: 2px;
+
+      img{
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+  .comment{
+    border-top: 1px solid #dedede;
+    padding-left: 36px;
+    box-sizing: border-box;
+    background: url("/static/images/components/comment.png") no-repeat 15px 10px;
+    background-size: 16px auto;
+
+    .title-bar{
+      line-height: 1.3em;
+      padding: 10px 15px 10px 0;
+      color: #323232;
+      font-size: 14px;
+    }
+  }
+}
+.txt-area-box{
+  font-size: 15px;
+}
+.section-name{
+  display: inline-block;
+  padding: 0 5px;
+  margin-right: 5px;
+  color: @theme-color;
+  font-size: 12px;
+  border: 1px solid @theme-color;
+  border-radius: 2px;
+}
