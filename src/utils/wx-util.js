@@ -96,6 +96,7 @@ export const WxUtil = {
           .then(resp => {
             if(resp.success){
               window.localStorage.setItem('token', resp.result.accessToken);
+              window.localStorage.setItem('user_id', resp.result.userId);
             }
             callback();
             Vue.$vux.loading.hide();
