@@ -1,13 +1,14 @@
 <template>
   <div>
     <div class="bg-color-white head-wrp">
-      <x-input v-model="article.title" placeholder="标题，可以不填…"></x-input>
+      <x-input v-model="article.title" :show-clear="false" placeholder="标题，可以不填…"></x-input>
       <x-textarea v-model="article.topic" placeholder="亲，记录您此刻的想法吧…"></x-textarea>
     </div>
 
-    <div class="bg-color-white padding-15">
+    <!-- 定位暂时不实现 -->
+    <!--<div class="bg-color-white padding-15">
       <div class="local-btn" @click="onGetLocation">正在定位...</div>
-    </div>
+    </div>-->
 
     <div class="padding-lr-15 menu-bar">
       <div class="menu-it">
@@ -51,11 +52,7 @@
 
 <script>
   import {XTextarea, XInput, XButton, Spinner} from 'vux';
-
-  //   "topic": "string",
-  //   "pv": 0, 浏览量
-  //   "title": "string",
-  //   "communitySectionId": 0,
+  import {Utils} from "@/utils/utils";
 
   export default {
     name: 'posting',
@@ -125,34 +122,44 @@
       onUploadImg(e){
         const files = Array.from(e.target.files);
         const formData = new FormData();
-        const head = {
-          'Content-Type': 'multipart/form-data',
-        };
         const originLen = this.imageUris.length;
+        let count = 0;
 
         files.forEach((itm, idx) => {
-          formData.append(`file${idx}`, itm, itm.name);
+          Utils.renderFile(itm, (blod) => {
+            formData.append(`file${idx}`, blod, itm.name);
+            count += 1;
+          });
+
+          // formData.append(`file${idx}`, itm, itm.name);
           this.imageUris.push('');
         });
 
-        this.$api.uploadImage(formData)
-          .then(resp => {
-            if(resp.success){
-              resp.result.forEach((itm, idx) => {
-                this.imageTokens.push(itm.fileToken);
+        // 清空file表单
+        e.target.value = '';
 
-                this.downloadImg({id: itm.fileToken})
-                  .then(resp => {
-                    if(resp.success){
-                      const uriPrefix = `data:image/png;base64,${resp.result}`;
-                      const curIdx = originLen + idx;
+        const timer = setInterval(() => {
+          if(files.length === count){
+            clearInterval(timer);
+            this.$api.uploadImage(formData)
+              .then(resp => {
+                if(resp.success){
+                  resp.result.forEach((itm, idx) => {
+                    this.imageTokens.push(itm.fileToken);
+                    this.downloadImg({id: itm.fileToken})
+                      .then(resp => {
+                        if(resp.success){
+                          const uriPrefix = `data:image/png;base64,${resp.result}`;
+                          const curIdx = originLen + idx;
 
-                      this.$set(this.imageUris, curIdx, uriPrefix);
-                    }
+                          this.$set(this.imageUris, curIdx, uriPrefix);
+                        }
+                      });
                   });
+                }
               });
-            }
-          });
+          }
+        }, 100);
       },
 
       downloadImg(params){
@@ -208,6 +215,7 @@
 <style lang="less" scoped>
   .head-wrp{
     padding-left: 0;
+    font-size: 16px;
   }
   .menu-bar{
     display: flex;

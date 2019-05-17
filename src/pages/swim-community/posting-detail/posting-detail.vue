@@ -1,5 +1,5 @@
 <template>
-  <div v-if="postingData">
+  <div style="background: #fff;" v-if="postingData.community">
     <m-card :data="postingData"></m-card>
   </div>
 </template>
@@ -15,7 +15,7 @@
     data(){
       return {
         id: '',
-        postingData: null,
+        postingData: {},
       };
     },
     created(){
@@ -28,7 +28,8 @@
         this.$api.getPostingDetail({id: this.id})
           .then(resp => {
             if(resp.success){
-              this.postingData = resp.result;
+              this.postingData = Object.assign({}, resp.result, resp.result.getCommunityForEditOutputDto);
+              delete this.postingData.getCommunityForEditOutputDto;
             }
             this.$vux.loading.hide();
           });

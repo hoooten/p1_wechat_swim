@@ -3,7 +3,7 @@
     <div class="margin-bottom-10" v-for="(itm, idx) of teachPoints" :key="idx">
       <m-panel
         class="margin-bottom-10"
-        cover="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1555756801097&di=13624bb4d756d9404649ddee77af2a60&imgtype=0&src=http%3A%2F%2Fimg.redocn.com%2Fsheying%2F20150408%2Fjiudianyouyongchi_4098011.jpg"
+        :cover="pointAvatars[idx]"
         :title="itm.techPoint.name"
         @on-click="onLink2Deatil(itm.techPoint.id)">
         <div class="point-addr" slot="content">
@@ -21,6 +21,7 @@
 <script>
   import {MPanel} from '@/components';
   import {LoadMore} from 'vux';
+  import {WxUtil} from "@/utils/wx-util";
 
   export default {
     name: 'teaching-nearby',
@@ -31,16 +32,29 @@
     data(){
       return {
         q: {
-          Filter: '',
-          UserNameFilter: '',
-          Sorting: '',
+          Lat: '',
+          Lon: '',
           SkipCount: 1,
           MaxResultCount: 20,
         },
         teachPoints: [],
+        pointAvatars: [],
         loadingAll: false,
         loadingMoreFlag: true,
       };
+    },
+    created(){
+      WxUtil.getUserLocation(resp => {
+        if(resp){
+          this.q.Lat = resp.lat;
+          this.q.Lon = resp.Lon;
+          this.getTeachingList();
+        }else{
+          this.$vux.alert.show({
+            content: '您拒绝了授权获取地理位置',
+          });
+        }
+      });
     },
     mounted(){
       this.getTeachingList();
@@ -60,7 +74,8 @@
                 this.loadingAll = false;
               }
 
-              this.teachPoints = resp.result.items;
+              this.teachPoints.push(...resp.result.items);
+              this.downloadPointAvatar(resp.result.items);
             }
             this.loadingMoreFlag = true;
           });
@@ -89,6 +104,21 @@
           }
         }, false);
       },
+
+      downloadPointAvatar(points){
+        points.forEach((it, idx) => {
+          if(it.photos.length > 0){
+            this.$api.downloadImage({id: it.photos[0].sitePhototId})
+              .then(resp => {
+                if(resp.result){
+                  const base64 = `data:image/png;base64,${resp.result}`;
+
+                  this.$set(this.pointAvatars, idx, base64);
+                }
+              });
+          }
+        });
+      }
     },
   }
 </script>

@@ -25,7 +25,7 @@
     props: {
       cover: {
         type: String,
-        default: '',
+        default: '/static/images/common/img-cover.png',
       },
       title: {
         type: String,

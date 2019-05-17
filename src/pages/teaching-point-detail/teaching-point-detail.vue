@@ -6,7 +6,7 @@
       </cell>
       <cell primary="content" title="场所位置：" value-align="left" align-items="flex-start">
         <div class="cell-con">
-          <div class="mg-b-10">
+          <div class="mg-b-10 vux-1px-b" style="padding-bottom: 10px;">
             <div class="mg-b-5">浮潜：</div>
             <div>
               {{floatLocation}}
@@ -39,7 +39,7 @@
       </cell>
       <cell primary="content" title="场所实景：" align-items="flex-start">
         <div class="img-box">
-          <img :src="`data:image/png;base64,${licenseBase64}`">
+          <img v-for="(imgUrl, idx) of sceneImages" :src="`data:image/png;base64,${imgUrl}`">
         </div>
       </cell>
       <cell primary="content" title="营业执照：" align-items="flex-start">
@@ -90,6 +90,7 @@
         constantTemperature: true,
         disinfection: DISINFECTION,
         licenseBase64: '',
+        sceneImages: [],
       };
     },
     computed: {
@@ -110,6 +111,7 @@
               this._dealFloatLocation(resp.result.getTechPointForEditDto.techPoint.floatLocation.split(''));
               this._dealPoolType(resp.result.getTechPointForEditDto.techPoint.swimLocation.split(''));
 
+              this.downloadSceneImgs(resp.result.photos);
               this.$api.downloadImage({id: resp.result.getTechPointForEditDto.techPoint.licenseId})
                 .then(resp => {
                   this.licenseBase64 = resp.result;
@@ -145,6 +147,16 @@
         });
 
         this.poolType = poolType;
+      },
+
+      /** 下载教点场景图 */
+      downloadSceneImgs(imgTokens){
+        imgTokens.forEach((it, idx) => {
+          this.$api.downloadImage({id: it.sitePhototId})
+            .then(resp => {
+              this.sceneImages.push(resp.result);
+            });
+        });
       },
     },
   }

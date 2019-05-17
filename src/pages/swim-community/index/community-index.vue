@@ -43,11 +43,21 @@
         <load-more v-if="!loadingAll" tip="正在加载"></load-more>
         <load-more v-if="loadingAll" tip="暂无更多数据" :show-loading="false"></load-more>
     </div>
+
+    <!-- 图片预览 -->
+    <div v-transfer-dom>
+      <!--<previewer
+        :list="imgList"
+        ref="previewer"
+        :options="options"
+        @on-index-change="logIndexChange"></previewer>-->
+      <previewer></previewer>
+    </div>
   </div>
 </template>
 
 <script>
-  import {Marquee, MarqueeItem, LoadMore} from 'vux';
+  import {Marquee, MarqueeItem, LoadMore, Previewer, TransferDom} from 'vux';
   import MCard from './components/MCard.vue';
 
   export default {
@@ -57,6 +67,8 @@
       MarqueeItem,
       MCard,
       LoadMore,
+      Previewer,
+      TransferDom,
     },
     data(){
       return {
@@ -74,6 +86,12 @@
         currentSectionId: '',
         loadingAll: false,
         loadingMoreFlag: true,
+        imgList: [],
+        imgPreviewOptions: {
+          getThumbBoundsFn(index){
+
+          }
+        },
       };
     },
     created(){
@@ -100,7 +118,7 @@
       getPostingWithPage(){
         this.$api.getPosting(this.q)
           .then(resp => {
-            if(resp.success){
+            if(resp && resp.success){
               if(resp.result.items.length < 20){
                 this.loadingAll = true;
               }else{

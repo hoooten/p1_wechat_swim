@@ -13,7 +13,7 @@
 
     <div class="bg-color-white base-cell" v-if="userInfo.user">
       <group>
-        <cell value-align="right" is-link :to="`/user/posting-history/${userInfo.user.id}`">
+        <cell value-align="right" is-link :link="`/user/posting-history/${userInfo.user.id}`">
           <div class="cell-tt" slot="title">
             <img src="/static/images/user-center/icon-message.png">
             <span>我的发帖</span>
@@ -48,11 +48,11 @@
     methods: {
       getUserData(){
         this.$vux.loading.show();
-        this.$api.getUserInfo()
+        this.$api.getUserInfo({id: window.localStorage.getItem('user_id')})
           .then(resp => {
             if(resp.success){
               this.userInfo = resp.result;
-              this.userImg = resp.result.profilePictureId ? resp.result.profilePictureId : 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1554999782090&di=c4c31edac68aab4c36c28cf89d3f4361&imgtype=0&src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201807%2F08%2F030411wzuptoo5o97j8z4v.jpg';
+              this.userImg = resp.result.user.photoURL ? resp.result.user.photoURL : 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1554999782090&di=c4c31edac68aab4c36c28cf89d3f4361&imgtype=0&src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201807%2F08%2F030411wzuptoo5o97j8z4v.jpg';
             }
             this.$vux.loading.hide();
           });

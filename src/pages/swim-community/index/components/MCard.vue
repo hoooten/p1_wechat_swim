@@ -36,7 +36,7 @@
         <div class="operation">
           <span><img src="/static/images/components/transmit.png">转</span>
           <span @click="isShowTextArea = true"><img src="/static/images/components/comment.png">评<b>{{posting.commentList.length > 0 ? posting.commentList.length : ''}}</b></span>
-          <span @click="onSupport(data.community.id)">
+          <span @click="onSupport(data.community.id, data.currentStartId)">
             <img v-if="posting.isSuport" src="/static/images/components/support_on.png">
             <img v-else src="/static/images/components/support.png">赞<b>{{posting.supports.length > 0 ? posting.supports.length : ''}}</b>
           </span>
@@ -108,7 +108,7 @@
           commentList: this.data.comments,
           imagesList: [],
           supports: this.data.stars,
-          isSuport: false,
+          isSuport: this.data.isStared,
         },
       };
     },
@@ -162,16 +162,26 @@
       },
 
       /** 点赞/取消点赞 */
-      onSupport(communityId){
+      onSupport(communityId, supportId){
         const _this = this;
 
-        this.$api.supportPosting({communityId: communityId})
-          .then(resp => {
-            if(resp.success){
-              this.posting.isSuport = true;
-              this.getSupports(communityId);
-            }
-          });
+        if(this.posting.isSuport){
+          this.$api.cancelSupport({id: supportId})
+            .then(resp => {
+              if(resp.success){
+                this.posting.isSuport = false;
+                this.getSupports(communityId);
+              }
+            })
+        }else{
+          this.$api.supportPosting({communityId: communityId})
+            .then(resp => {
+              if(resp.success){
+                this.posting.isSuport = true;
+                this.getSupports(communityId);
+              }
+            });
+        }
       },
 
       /** 更新点赞数据 */

@@ -51,7 +51,7 @@ module.exports = {
 
   build: {
     // Template for join-menu.html
-    index: path.resolve(__dirname, '../dist/join-menu.html'),
+    index: path.resolve(__dirname, '../dist/index.html'),
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),

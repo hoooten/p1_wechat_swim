@@ -31,9 +31,20 @@ function doGet(url, params = {}){
   return axios.get(url, {params: params});
 }
 
+/**
+ * delete请求
+ * @param url
+ * @param parmas
+ * @returns {AxiosPromise}
+ */
+function doDelete(url, params = {}){
+  return axios.delete(url, {params: params});
+}
+
 export default {
   doPost,
   doGet,
+  doDelete,
 }
 
 

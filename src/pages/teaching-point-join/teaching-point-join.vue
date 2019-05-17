@@ -111,6 +111,7 @@
 <script>
   import {Group, XInput, Cell, PopupRadio, Datetime, XAddress, XTextarea, ChinaAddressV4Data, XButton, Spinner} from 'vux';
   import {MRadio, MCheckbox} from '@/components';
+  import {Utils} from '@/utils/utils';
 
   export default {
     name: 'teaching-point-join',
@@ -330,9 +331,13 @@
       onUploadImg(e, imgType){
         const files = Array.from(e.target.files);
         const formData = new FormData();
+        let count = 0;
 
         files.forEach((itm, idx) => {
-          formData.append(`file${idx}`, itm, itm.name);
+          Utils.renderFile(itm, (blod) => {
+            formData.append(`file${idx}`, blod, itm.name);
+            count += 1;
+          });
 
           if(imgType === 'scene'){
             this.image.realSceneImageUris.push('');
@@ -340,14 +345,20 @@
             this.image.licenseImageUris.push('');
           }
         });
+
         // 清空file表单
         e.target.value = '';
 
-        if(imgType === 'scene'){
-          this._uploadSceneImages(formData);
-        }else{
-          this._uploadLicenceImages(formData);
-        }
+        const timer = setInterval(() => {
+          if(files.length === count){
+            clearInterval(timer);
+            if(imgType === 'scene'){
+              this._uploadSceneImages(formData);
+            }else{
+              this._uploadLicenceImages(formData);
+            }
+          }
+        }, 100);
       },
 
       /** 教点实景图上传 */
@@ -474,6 +485,7 @@
           height: 30px;
           background: url("/static/images/common/icon-del-grey.png") no-repeat center center;
           background-size: 30px auto;
+          z-index: 100;
         }
       }
       .upd-btn{
@@ -485,7 +497,7 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        line-height: 70px;
+        line-height: 90px;
         left: 0;
         top: 0;
         text-align: center;

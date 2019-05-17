@@ -12,7 +12,7 @@ export class ApiService{
 
   /** 获取公众号配置信息 */
   getWechatConfig(params = {}){
-    const mUrl = 'http://hoooten.com/WechatUi/GetJSSDKJson';
+    const mUrl = 'http://hoooten.com:22743/WechatUi/UsingGetJSSDKJson';
 
     return getWechatConfig(mUrl, params);
   }
@@ -26,7 +26,14 @@ export class ApiService{
 
   /** 微信登录 */
   loginWithWechat(params = {}){
-    const mUrl = 'TokenAuth/WeChatAuthenticate';
+    const mUrl = 'TokenAuth/WechatAuthenticate1';
+
+    return post(mUrl, params);
+  }
+
+  /** 获取用户的token */
+  getUserToken(params = {}){
+    const mUrl = 'TokenAuth/WechatAuthenticateByUserId';
 
     return post(mUrl, params);
   }
@@ -159,6 +166,13 @@ export class ApiService{
     return post(mUrl, params);
   }
 
+  /** 取消点赞 */
+  cancelSupport(params = {}){
+    const mUrl = 'services/app/StarHistories/Delete';
+
+    return doDelete(mUrl, params);
+  }
+
   /** 获取帖子的详情 */
   getPostingDetail(params = {}){
     const mUrl = 'services/app/Communities/GetCommunityForEdit';
@@ -183,9 +197,9 @@ export class ApiService{
 
 /** post请求 */
 function post(mUrl, query) {
-  const params = Object.assign({}, query, {userId: window.localStorage.getItem('user_id')});
+  // const params = Object.assign({}, query, {userId: window.localStorage.getItem('user_id')});
 
-  return http.doPost(mUrl, params).then(resolve => {
+  return http.doPost(mUrl, query).then(resolve => {
     const resp = resolve.data;
 
     if(!resp.success){
@@ -207,9 +221,33 @@ function post(mUrl, query) {
 
 /** get请求 */
 function get(mUrl, query) {
-  const params = Object.assign({}, query, {userId: window.localStorage.getItem('user_id')});
+  // const params = Object.assign({}, query, {userId: window.localStorage.getItem('user_id')});
 
-  return http.doGet(mUrl, params).then(resolve => {
+  return http.doGet(mUrl, query).then(resolve => {
+    const resp = resolve.data;
+
+    if(!resp.success){
+      Vue.$vux.alert.show({
+        content: JSON.stringify(resp.error),
+      });
+
+      return false;
+    }
+
+    return resp;
+  }).catch(err => {
+    Vue.$vux.alert.show({
+      content: err.toString(),
+    });
+    Vue.$vux.loading.hide();
+  });
+}
+
+/** delete请求处理 */
+function doDelete(mUrl, query) {
+  // const params = Object.assign({}, query, {userId: window.localStorage.getItem('user_id')});
+
+  return http.doDelete(mUrl, query).then(resolve => {
     const resp = resolve.data;
 
     if(!resp.success){
@@ -231,7 +269,7 @@ function get(mUrl, query) {
 
 /** 图片上传 */
 function imageUpload(formData) {
-  const uploadUrl = 'http://www.hoooten.com/File/UploadFiles';
+  const uploadUrl = 'http://www.hoooten.com:22743/File/UploadFiles';
   const head = {
     'Content-Type': 'multipart/form-data',
   };
@@ -257,7 +295,7 @@ function imageUpload(formData) {
 
 /** 图片下载 */
 function downloadImage(params) {
-  const downloadUrl = 'http://www.hoooten.com/File/DownloadImg';
+  const downloadUrl = 'http://www.hoooten.com:22743/File/DownloadImg';
   // const head = {
   //   'Content-Type': 'application/json',
   //   'Authorization': `Bearer ${window.localStorage.getItem('token')}`,
@@ -284,7 +322,7 @@ function downloadImage(params) {
 
 /** 删除图片 */
 function deleteImage(params) {
-  const deleteUrl = 'http://www.hoooten.com/File/DeleteFile';
+  const deleteUrl = 'http://www.hoooten.com:22743/File/DeleteFile';
   const head = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${window.localStorage.getItem('token')}`,
@@ -311,11 +349,7 @@ function deleteImage(params) {
 
 /** 获取微信公众号配置信息 */
 function getWechatConfig(mUrl, params) {
-  const head = {
-    'Authorization': `Bearer ${window.localStorage.getItem('token')}`,
-  };
-
-  return axios.get(mUrl, {params: params, headers: head}).then(resolve => {
+  return axios.get(mUrl, {params: params}).then(resolve => {
     const resp = resolve.data;
 
     if(!resp.success){

@@ -55,7 +55,8 @@
 <script>
   import {Tabbar, TabbarItem} from 'vux';
   import {HeadBar} from '@/components';
-  import {WxUtil} from "./utils/wx-util";
+  import {Utils} from '@/utils/utils';
+  import {WxUtil} from '@/utils/wx-util';
 
   export default {
     name: 'app',
@@ -100,32 +101,19 @@
       }
     },
     mounted(){
-      WxUtil.getUserLocation();
-      this.$api.loginDemo({userNameOrEmailAddress: 'admin', password: '123qwe'})
-        .then(resp => {
-          if(resp.success){
-            window.localStorage.setItem('token', resp.result.accessToken);
-            window.localStorage.setItem('user_id', resp.result.userId);
-          }
-        });
+      // this.$api.loginDemo({userNameOrEmailAddress: 'admin', password: '123qwe'})
+      //   .then(resp => {
+      //     if(resp.success){
+      //       window.localStorage.setItem('token', resp.result.accessToken);
+      //       window.localStorage.setItem('user_id', resp.result.userId);
+      //     }
+      //   });
     },
     methods: {
       onBack(){
         if(this.urlName){
           this.$router.push({name: this.urlName});
         }
-      },
-
-      loginWithWx(){
-        const params = {
-          authProvider: 'Wechat',
-          providerAccessCode: '',
-        };
-
-        this.$api.loginWithWechat()
-          .then(resp => {
-
-          });
       },
     },
   }

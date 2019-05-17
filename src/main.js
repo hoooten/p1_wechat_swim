@@ -4,7 +4,7 @@ import router from '@/router';
 import App from './App';
 import {ApiService} from "./api/Api.class";
 import {Pipes} from '@/pipes/pipes';
-import {WxUtil} from "./utils/wx-util";
+import {WxUtil} from '@/utils/wx-util';
 // px转rem
 import 'lib-flexible';
 
@@ -22,7 +22,18 @@ for(let k in Pipes){
   Vue.filter(`${k}`, Pipes[k]);
 }
 
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app-box');
+// 生产环境启动此方法
+WxUtil.getCodeFromUrl(() => {
+  new Vue({
+    router,
+    render: h => h(App)
+  }).$mount('#app-box');
+});
+
+// 开发环境渲染模式
+// setTimeout(() => {
+//   new Vue({
+//     router,
+//     render: h => h(App)
+//   }).$mount('#app-box');
+// }, 2000);
