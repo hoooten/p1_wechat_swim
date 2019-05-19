@@ -24,11 +24,11 @@
           <img slot="icon" v-else src="/static/images/bottom-tab/icon-join-grey.png">
           <span slot="label">加盟</span>
         </tabbar-item>
-        <tabbar-item :selected="tabName === 'coach_file_download'" link="/">
+        <!--<tabbar-item :selected="tabName === 'coach_file_download'" link="/">
           <img slot="icon" v-if="tabName === 'coach_file_download'" src="/static/images/bottom-tab/icon-cloud-blue.png">
           <img slot="icon" v-else src="/static/images/bottom-tab/icon-cloud-grey.png">
           <span slot="label">资料下载</span>
-        </tabbar-item>
+        </tabbar-item>-->
       </tabbar>
 
       <tabbar v-if="module">

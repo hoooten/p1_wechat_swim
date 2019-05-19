@@ -26,7 +26,7 @@
       <div class="images">
         <ul class="img-ul">
           <li v-for="(imgUri, idx) of posting.imagesList" :key="idx">
-            <img :src="imgUri">
+            <img class="post-img" :src="imgUri">
           </li>
         </ul>
       </div>
@@ -80,17 +80,30 @@
         </div>
       </div>
     </div>
+
+    <!-- 图片预览 -->
+    <div v-transfer-dom>
+      <previewer
+        :list="imgList"
+        ref="previewer"
+        :options="imgPreviewOptions"
+        @on-index-change="onViewImage"></previewer>
+    </div>
   </div>
 </template>
 
 <script>
-  import {XTextarea, XButton} from 'vux';
+  import {XTextarea, XButton, Previewer, TransferDom} from 'vux';
 
   export default {
     name: 'm-card',
+    directives: {
+      TransferDom,
+    },
     components: {
       XTextarea,
       XButton,
+      Previewer,
     },
     props: {
       data: {
@@ -109,6 +122,16 @@
           imagesList: [],
           supports: this.data.stars,
           isSuport: this.data.isStared,
+        },
+        imgList: [],
+        imgPreviewOptions: {
+          getThumbBoundsFn (index) {
+            let thumbnail = document.querySelectorAll('.post-img')[index];
+            let pageYScroll = window.pageYOffset || document.documentElement.scrollTop;
+            let rect = thumbnail.getBoundingClientRect();
+
+            return {x: rect.left, y: rect.top + pageYScroll, w: rect.width};
+          },
         },
       };
     },
@@ -154,8 +177,14 @@
             .then(resp => {
               if(resp.success){
                 const uri = `data:image/png;base64,${resp.result}`;
+                const imgHash = {
+                  src: uri,
+                  w: 600,
+                  h: 500
+                };
 
                 _this.posting.imagesList.push(uri);
+                this.imgList.push(imgHash);
               }
             });
         });
@@ -197,6 +226,11 @@
       /** 查看帖子详情 */
       onToDetail(communityId){
         this.$router.push({name: 'PostingDetail', params: {id: communityId}});
+      },
+
+      /** 预览图片 */
+      onViewImage(idx){
+        this.$refs.previewer.show(idx);
       },
     },
   }

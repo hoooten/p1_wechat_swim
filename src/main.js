@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import  { AlertPlugin, LoadingPlugin, ToastPlugin, ConfirmPlugin} from 'vux';
-import router from '@/router';
+import {router} from '@/router';
 import App from './App';
 import {ApiService} from "./api/Api.class";
 import {Pipes} from '@/pipes/pipes';
@@ -31,9 +31,7 @@ WxUtil.getCodeFromUrl(() => {
 });
 
 // 开发环境渲染模式
-// setTimeout(() => {
-//   new Vue({
-//     router,
-//     render: h => h(App)
-//   }).$mount('#app-box');
-// }, 2000);
+// new Vue({
+//   router,
+//   render: h => h(App)
+// }).$mount('#app-box');

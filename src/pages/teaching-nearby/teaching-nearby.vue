@@ -34,7 +34,7 @@
         q: {
           Lat: '',
           Lon: '',
-          SkipCount: 1,
+          SkipCount: 0,
           MaxResultCount: 20,
         },
         teachPoints: [],
@@ -47,7 +47,8 @@
       WxUtil.getUserLocation(resp => {
         if(resp){
           this.q.Lat = resp.lat;
-          this.q.Lon = resp.Lon;
+          this.q.Lon = resp.lon;
+          this.teachPoints = [];
           this.getTeachingList();
         }else{
           this.$vux.alert.show({

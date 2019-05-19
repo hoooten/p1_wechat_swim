@@ -38,7 +38,7 @@
           Filter: '',
           UserNameFilter: '',
           Sorting: '',
-          SkipCount: 1,
+          SkipCount: 0,
           MaxResultCount: 20,
         },
         loadingAll: false,

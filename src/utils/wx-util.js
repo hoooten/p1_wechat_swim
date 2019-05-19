@@ -15,7 +15,7 @@ export const WxUtil = {
             const config = resp.result;
 
             wx.config({
-              debug: true,
+              debug: false,
               appId: config.appId,              // 必填，企业号的唯一标识，此处填写企业号corpid
               timestamp: config.timestamp,      // 必填，生成签名的时间戳
               nonceStr: config.nonceStr,        // 必填，生成签名的随机串
@@ -63,28 +63,8 @@ export const WxUtil = {
     WxUtil._init().then(resp => {
       const encodeUrl = encodeURIComponent(window.location.href);
       const AUTH_UTL = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${resp.appId}&redirect_uri=${encodeUrl}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`;
+      const code = Utils.getUserCode();
 
-      window.location.href = AUTH_UTL;
-    });
-  },
-
-  /** 微信登录 */
-  getCodeFromUrl(callback = function(){}){
-    const code = Utils.getUserCode();
-    const userId = window.localStorage.getItem('user_id');
-
-    // 存在userId，证明用户已授权登录过公众号
-    if(userId){
-      Vue.$vux.loading.show('载入中…');
-      $vue.$api.getUserToken({UserId: userId})
-        .then(resp => {
-          if(resp.success){
-            window.localStorage.setItem('token', resp.result.accessToken);
-            callback();
-          }
-          Vue.$vux.loading.hide();
-        });
-    }else{
       if(code){
         const params ={
           authProvider: 'Wechat',
@@ -102,17 +82,40 @@ export const WxUtil = {
             Vue.$vux.loading.hide();
           });
       }else{
-        WxUtil.wxAuth();
+        window.location.href = AUTH_UTL;
       }
+    });
+  },
+
+  /** 微信登录 */
+  getCodeFromUrl(callback = function(){}){
+    const code = Utils.getUserCode();
+    const userId = window.localStorage.getItem('user_id') || 0;
+
+    // 存在userId，证明用户已授权登录过公众号
+    if(userId && +userId > 0){
+      Vue.$vux.loading.show('载入中…');
+      $vue.$api.getUserToken({UserId: userId})
+        .then(resp => {
+          if(resp.success){
+            window.localStorage.setItem('token', resp.result.accessToken);
+            callback();
+          }else{
+            WxUtil.wxAuth();
+          }
+          Vue.$vux.loading.hide();
+        });
+    }else{
+      WxUtil.wxAuth(callback);
     }
   },
 
   /** 微信分享 */
-  wxShare(options, callback){
+  wxShare(options = {}, callback){
     const mTitle = options.title || '皓思派--游泳|潜浮';
     const mDesc = options.desc || '皓思派潜伏欢迎您的加入！';
     const mLink = window.location.href;
-    const mImgUrl = options.imgUrl || 'http://m.tuniucdn.com/fb2/t1/G4/M00/AF/9C/Cii_J1xRUGaII7WCAAOoAmngE7EAADokgNXLDYAA6ga361_w450_h300_c1_t0.jpg';
+    const mImgUrl = options.imgUrl || 'http://47.107.105.195/static/images/64.jpg';
 
     WxUtil._init().then(() => {
       // 分享给朋友

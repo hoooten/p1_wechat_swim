@@ -43,21 +43,11 @@
         <load-more v-if="!loadingAll" tip="正在加载"></load-more>
         <load-more v-if="loadingAll" tip="暂无更多数据" :show-loading="false"></load-more>
     </div>
-
-    <!-- 图片预览 -->
-    <div v-transfer-dom>
-      <!--<previewer
-        :list="imgList"
-        ref="previewer"
-        :options="options"
-        @on-index-change="logIndexChange"></previewer>-->
-      <previewer></previewer>
-    </div>
   </div>
 </template>
 
 <script>
-  import {Marquee, MarqueeItem, LoadMore, Previewer, TransferDom} from 'vux';
+  import {Marquee, MarqueeItem, LoadMore} from 'vux';
   import MCard from './components/MCard.vue';
 
   export default {
@@ -67,8 +57,6 @@
       MarqueeItem,
       MCard,
       LoadMore,
-      Previewer,
-      TransferDom,
     },
     data(){
       return {
@@ -77,7 +65,7 @@
           UserNameFilter: '',
           CommunitySectionNameFilter: '',
           Sorting: '',
-          SkipCount: 1,
+          SkipCount: 0,
           MaxResultCount: 20,
         },
         headData: {},
@@ -86,12 +74,6 @@
         currentSectionId: '',
         loadingAll: false,
         loadingMoreFlag: true,
-        imgList: [],
-        imgPreviewOptions: {
-          getThumbBoundsFn(index){
-
-          }
-        },
       };
     },
     created(){
@@ -157,7 +139,7 @@
           this.q.CommunitySectionNameFilter = sectionName;
         }
 
-        this.q.SkipCount = 1;
+        this.q.SkipCount = 0;
         this.result = [];
         this.getPostingWithPage();
       },

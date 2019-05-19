@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="padding-15 border-box grid-box">
-      <router-link to="/community/index" class="block-card bg-blue">我是游泳爱好者</router-link>
-      <router-link to="/join/coach" class="block-card bg-red">我是教练</router-link>
-      <router-link to="/join/point" class="block-card bg-green">我要加盟</router-link>
+      <router-link to="/community/index" class="block-card bg-blue">皓思派|游泳社区</router-link>
+      <router-link to="/join/coach" class="block-card bg-red">教练加盟</router-link>
+      <router-link to="/join/point" class="block-card bg-green">教点加盟</router-link>
     </div>
   </div>
 </template>
