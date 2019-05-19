@@ -111,7 +111,7 @@
 <script>
   import {Group, XInput, Cell, PopupRadio, Datetime, XAddress, XTextarea, ChinaAddressV4Data, XButton, Spinner} from 'vux';
   import {MRadio, MCheckbox} from '@/components';
-  import {Utils} from '@/utils/utils';
+  import {Utils, WxUtil} from '@/utils/utils';
 
   export default {
     name: 'teaching-point-join',
@@ -192,6 +192,8 @@
           deepArea: '',
           description: '',
           licenseId: '',
+          lat: '',
+          lon: '',
         },
         image: {
           realSceneImageTokens: [],
@@ -200,6 +202,14 @@
           licenseImageUris: [],
         },
       };
+    },
+    created(){
+      WxUtil.getUserLocation((resp) => {
+        if(resp){
+          this.point.lat = resp.lat;
+          this.point.lon = resp.lon;
+        }
+      });
     },
     methods: {
       onPointJoin(){
