@@ -39,12 +39,12 @@
       </cell>
       <cell primary="content" title="场所实景：" align-items="flex-start">
         <div class="img-box">
-          <img v-for="(imgUrl, idx) of sceneImages" :src="`data:image/png;base64,${imgUrl}`">
+          <img class="preview-img" data-img="scene" v-for="(imgUrl, idx) of sceneImages" @click="onViewImage(idx)" :src="`data:image/png;base64,${imgUrl}`">
         </div>
       </cell>
       <cell primary="content" title="营业执照：" align-items="flex-start">
         <div class="img-box">
-          <img :src="`data:image/png;base64,${licenseBase64}`">
+          <img class="preview-img" @click="onViewImage(0)" data-img="license" :src="`data:image/png;base64,${licenseBase64}`">
         </div>
       </cell>
       <cell primary="content" title="冲凉房：">
@@ -66,11 +66,19 @@
         <div class="content">{{point.description}}</div>
       </cell>
     </group>
+
+    <!-- 图片预览 -->
+    <div v-transfer-dom>
+      <previewer
+        :list="imgList"
+        ref="previewer"
+        :options="imgPreviewOptions"></previewer>
+    </div>
   </div>
 </template>
 
 <script>
-  import {Cell, Group} from 'vux';
+  import {Cell, Group, Previewer, TransferDom} from 'vux';
 
   const FLOAT_TEMPLATE = ['江', '河', '湖', '海'];
   const POOL_TYPE = ['室内泳池', '露天游泳池'];
@@ -91,6 +99,39 @@
         disinfection: DISINFECTION,
         licenseBase64: '',
         sceneImages: [],
+        imgList: [],
+        imgPreviewOptions: {
+          getThumbBoundsFn: function (index) {
+            const thumbnail = document.querySelectorAll('.post-img')[index];
+            const imgType = thumbnail.dataset.img;
+            const pageYScroll = window.pageYOffset || document.documentElement.scrollTop;
+            const rect = thumbnail.getBoundingClientRect();
+
+            if (imgType === 'scene') {
+              this.sceneImages.forEach((uri, idx) => {
+                const imgHash = {
+                  src: uri,
+                  w: 600,
+                  h: 500
+                };
+
+                this.imgList = [];
+                this.imgList.push(imgHash);
+              });
+            }else{
+              const imgHash = {
+                src: this.licenseBase64,
+                w: 600,
+                h: 500
+              };
+
+              this.imgList = [];
+              this.imgList.push(imgHash);
+            }
+
+            return {x: rect.left, y: rect.top + pageYScroll, w: rect.width};
+          },
+        },
       };
     },
     computed: {
@@ -157,6 +198,11 @@
               this.sceneImages.push(resp.result);
             });
         });
+      },
+
+      /** 预览图片 */
+      onViewImage(idx){
+        this.$refs.previewer.show(idx);
       },
     },
   }

@@ -23,15 +23,15 @@ for(let k in Pipes){
 }
 
 // 生产环境启动此方法
-WxUtil.getCodeFromUrl(() => {
-  new Vue({
-    router,
-    render: h => h(App)
-  }).$mount('#app-box');
-});
+// WxUtil.getCodeFromUrl(() => {
+//   new Vue({
+//     router,
+//     render: h => h(App)
+//   }).$mount('#app-box');
+// });
 
 // 开发环境渲染模式
-// new Vue({
-//   router,
-//   render: h => h(App)
-// }).$mount('#app-box');
+new Vue({
+  router,
+  render: h => h(App)
+}).$mount('#app-box');

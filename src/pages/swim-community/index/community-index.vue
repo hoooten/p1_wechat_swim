@@ -14,13 +14,14 @@
           <span>访问 {{headData.totalPV}}</span>
         </div>
       </div>
-      <div class="padding-lr-15 marquee">
+      <!-- 跑马灯暂时注释 -->
+      <!--<div class="padding-lr-15 marquee">
         <marquee>
           <marquee-item v-for="i in 5" :key="i" class="align-middle">
             <img class="info-horn" src="/static/images/common/horn-blue.png">hello world {{i}}
           </marquee-item>
         </marquee>
-      </div>
+      </div>-->
     </div>
 
     <div class="container bg-color-white">

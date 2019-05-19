@@ -26,7 +26,7 @@
       <div class="images">
         <ul class="img-ul">
           <li v-for="(imgUri, idx) of posting.imagesList" :key="idx">
-            <img class="post-img" :src="imgUri">
+            <img @click="onViewImage(idx)" class="post-img" :src="imgUri">
           </li>
         </ul>
       </div>
@@ -86,8 +86,7 @@
       <previewer
         :list="imgList"
         ref="previewer"
-        :options="imgPreviewOptions"
-        @on-index-change="onViewImage"></previewer>
+        :options="imgPreviewOptions"></previewer>
     </div>
   </div>
 </template>

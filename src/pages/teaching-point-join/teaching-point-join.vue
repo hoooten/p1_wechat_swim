@@ -1,6 +1,6 @@
 <template>
   <div>
-    <group title="必填项" label-width="5em" label-margin-right="1em" label-align="left">
+    <group title="必填项" label-width="5.2em" label-margin-right="1em" label-align="left">
       <x-input title="场所名称：" v-model="point.name" placeholder="必填" :show-clear="false"></x-input>
       <cell primary="content" title="场所位置：" value-align="left" align-items="flex-start">
         <div class="cell-con">
@@ -59,7 +59,7 @@
       </cell>
     </group>
 
-    <group title="选填项" label-width="5em" label-margin-right="1em" label-align="left">
+    <group title="选填项" label-width="5.2em" label-margin-right="1em" label-align="left">
       <cell primary="content" title="营业执照：" align-items="flex-start">
         <div class="img-box">
           <ul class="img-row">
@@ -497,7 +497,7 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        line-height: 90px;
+        line-height: 75px;
         left: 0;
         top: 0;
         text-align: center;
