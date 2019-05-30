@@ -77,6 +77,8 @@ export const WxUtil = {
             if(resp.success){
               window.localStorage.setItem('token', resp.result.accessToken);
               window.localStorage.setItem('user_id', resp.result.userId);
+              window.localStorage.setItem('head_img', resp.result.headimgurl);
+              window.localStorage.setItem('nick_name', resp.result.nickname);
             }
             callback();
             Vue.$vux.loading.hide();
@@ -99,6 +101,8 @@ export const WxUtil = {
         .then(resp => {
           if(resp.success){
             window.localStorage.setItem('token', resp.result.accessToken);
+            window.localStorage.setItem('head_img', resp.result.headimgurl);
+            window.localStorage.setItem('nick_name', resp.result.nickname);
             callback();
           }else{
             WxUtil.wxAuth();

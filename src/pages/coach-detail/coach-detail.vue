@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="padding-tb-15 coach-img">
-      <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553696314856&di=cb03cfa0c95730ba1b4ff4f3074b44e9&imgtype=0&src=http%3A%2F%2Fpic.58pic.com%2F58pic%2F11%2F07%2F06%2F88T58PICWVb.jpg">
+      <img :src="headImgUrl">
     </div>
 
     <group label-width="5.5em" v-if="coachData">
@@ -59,7 +59,11 @@
     computed: {
       id(){
         return this.$route.params.id;
-      }
+      },
+
+      headImgUrl(){
+        return window.localStorage.getItem('head_img');
+      },
     },
     created(){
       this.getCoachData();

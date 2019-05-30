@@ -2,11 +2,11 @@
   <div>
     <div class="wx-name" v-if="userInfo.user">
       <div class="user-cover">
-        <img class="img-position-center" :src="userImg">
+        <img class="img-position-center" :src="headImgUrl">
       </div>
       <div class="user-nick">
         <div>
-          <strong>{{userInfo.user.userName}}</strong>
+          <strong>{{nickName}}</strong>
         </div>
       </div>
     </div>
@@ -41,6 +41,15 @@
         userInfo: {},
         userImg: '',
       };
+    },
+    computed: {
+      headImgUrl(){
+        return window.localStorage.getItem('head_img');
+      },
+
+      nickName(){
+        return window.localStorage.getItem('nick_name');
+      },
     },
     created(){
       this.getUserData();
