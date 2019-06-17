@@ -22,8 +22,8 @@ const RouteWithCoach = [{
   name: 'Index',
   component: TeachingNearby,
   meta: {
-    title: '附近教点',
-    tabName: 'teach_point_nearby',
+    title: '附近教点',                // 导航栏标题
+    tabName: 'teach_point_nearby',  // 底部tab的标识符
   }
 }, {
   path: '/coach/qualify',
@@ -39,7 +39,7 @@ const RouteWithCoach = [{
   component: CoachDetail,
   meta: {
     title: '教练资质详情',
-    urlName: 'CoachQualify',
+    urlName: 'CoachQualify',    // 点击返回键路由到指定页面
   },
 }, {
   path: '/join',
@@ -55,7 +55,7 @@ const RouteWithCoach = [{
   component: CoachJoin,
   meta: {
     title: '教练加盟',
-    urlName: 'JoinIn',
+    back: true,             // 回退到上一页
   },
 }, {
   path: '/join/point',
@@ -63,7 +63,7 @@ const RouteWithCoach = [{
   component: TeachingPointJoin,
   meta: {
     title: '教点加盟',
-    urlName: 'JoinIn',
+    back: true,
   },
 }, {
   path: '/point/detail/:id',
@@ -87,7 +87,7 @@ const RouteWithCommunity = [{
   meta: {
     tabName: 'community_index',
     title: '皓思派-潜泳社区',
-    module: 'community',
+    module: 'community',        // 所属模块标识符
     urlName: 'JoinIn',
   },
 }, {

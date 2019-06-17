@@ -10,15 +10,15 @@
   export default {
     name: 'm-checkbox',
     props: {
-      options: {
-        type: [Array, Object],
-        required: true,
-      },
-      defaultOption: {
+      value: {
         type: Array,
         default(){
           return [];
         },
+      },
+      options: {
+        type: [Array, Object],
+        required: true,
       },
       display: {
         type: String,
@@ -30,9 +30,14 @@
         checked: [],
       };
     },
-    mounted(){
-      this.checked = this.defaultOption;
+    watch: {
+      value(cur){
+        this.checked = cur;
+      }
     },
+    // mounted(){
+    //   this.checked = this.value;
+    // },
     methods: {
       onSelect(event){
         const val = event.target.value;

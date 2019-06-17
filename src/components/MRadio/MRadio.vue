@@ -10,14 +10,18 @@
   export default {
     name: 'm-radio',
     props: {
+      value: {
+        type: String | Number,
+        default: '',
+      },
       options: {
         type: [Array, Object],
         required: true,
       },
-      defaultOption: {
-        type: String | Number,
-        default: '',
-      },
+      // defaultOption: {
+      //   type: String | Number,
+      //   default: '',
+      // },
       marginRight: {
         type: Number,
         default: 20,
@@ -29,9 +33,14 @@
         checked: '',
       };
     },
-    mounted(){
-      this.checked = this.defaultOption;
+    watch: {
+      value(cur){
+        this.checked = cur;
+      },
     },
+    // mounted(){
+    //   this.checked = this.defaultOption;
+    // },
     methods: {
       onChange(event){
         this.checked = event.target.value;

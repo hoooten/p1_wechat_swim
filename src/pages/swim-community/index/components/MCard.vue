@@ -32,9 +32,8 @@
       </div>
 
       <div class="margin-bottom-10 comments">
-        <!--<div class="location">嘉峪关市嘉峪关市市辖区迎宾西路</div>-->
         <div class="operation">
-          <span><img src="/static/images/components/transmit.png">转</span>
+          <!--<span><img src="/static/images/components/transmit.png">转</span>-->
           <span @click="isShowTextArea = true"><img src="/static/images/components/comment.png">评<b>{{posting.commentList.length > 0 ? posting.commentList.length : ''}}</b></span>
           <span @click="onSupport(data.community.id, data.currentStartId)">
             <img v-if="posting.isSuport" src="/static/images/components/support_on.png">

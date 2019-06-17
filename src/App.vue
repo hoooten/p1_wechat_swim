@@ -2,7 +2,7 @@
   <div id="app">
     <head-bar
       :title="title"
-      :back-type="urlName ? 'blue' : 'white'"
+      :back-type="urlName || backFlag ? 'blue' : 'white'"
       @on-back="onBack"></head-bar>
 
     <router-view></router-view>
@@ -67,19 +67,21 @@
     },
     data(){
       return {
-        showTab: true,
-        tabName: '',
-        title: '',
-        urlName: '',
-        module: '',
+        showTab: true,    // 是否显示tab
+        tabName: '',      // tab的标识符
+        title: '',        // 导航栏标题
+        urlName: '',      // 回退的路由名称
+        module: '',       // 模块名称
+        backFlag: false,  // 是否是回退到上一页，与urlName设置其一即可
       };
     },
     watch: {
       $route(to, from){
         if(to.meta){
           this.tabName = to.meta.tabName;
-          this.title = to.meta.title;
+          this.title = to.query.title || to.meta.title;
           this.module = to.meta.module;
+          this.backFlag = to.meta.back;
           this.urlName = '';
 
           if(to.meta.urlName){
@@ -92,8 +94,9 @@
       this.urlName = '';
       if(this.$route.meta){
         this.tabName = this.$route.meta.tabName;
-        this.title = this.$route.meta.title;
+        this.title = this.$route.query.title || this.$route.meta.title;
         this.module = this.$route.meta.module;
+        this.backFlag = this.$route.meta.back;
 
         if(this.$route.meta.urlName){
           this.urlName = this.$route.meta.urlName;
@@ -101,18 +104,21 @@
       }
     },
     mounted(){
-      // this.$api.loginDemo({userNameOrEmailAddress: 'admin', password: '123qwe'})
-      //   .then(resp => {
-      //     if(resp.success){
-      //       window.localStorage.setItem('token', resp.result.accessToken);
-      //       window.localStorage.setItem('user_id', resp.result.userId);
-      //     }
-      //   });
+      // 开发环境登陆方式
+      this.$api.loginDemo({userNameOrEmailAddress: 'admin', password: '123qwe'})
+        .then(resp => {
+          if(resp.success){
+            window.localStorage.setItem('token', resp.result.accessToken);
+            window.localStorage.setItem('user_id', resp.result.userId);
+          }
+        });
     },
     methods: {
       onBack(){
         if(this.urlName){
           this.$router.push({name: this.urlName});
+        }else{
+          this.$router.back();
         }
       },
     },

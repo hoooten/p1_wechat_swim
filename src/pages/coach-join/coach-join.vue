@@ -23,7 +23,7 @@
     </group>
 
     <div class="padding-15">
-      <x-button :gradients="['#1D62F0', '#19D5FD']" @click.native="onCoachJoin">加盟</x-button>
+      <x-button :gradients="['#1D62F0', '#19D5FD']" @click.native="onCoachJoin">{{coach.id ? '提交修改' : '加盟'}}</x-button>
     </div>
   </div>
 </template>
@@ -31,6 +31,7 @@
 <script>
   import {Group, XInput, Cell, Datetime, XAddress, XTextarea, ChinaAddressV4Data, XButton, PopupPicker} from 'vux';
   import {MRadio} from '@/components';
+  import {Utils} from '@/utils/utils';
 
   export default {
     name: 'coach-join',
@@ -60,6 +61,7 @@
         addressList: ChinaAddressV4Data,
         addressNames: [],
         coach: {
+          id: '',
           name: '',
           gender: '',
           phone: '',
@@ -79,7 +81,45 @@
         return window.localStorage.getItem('head_img');
       },
     },
+    created(){
+      this.coach.id = this.$route.query.id;
+      if(this.coach.id){
+        this.getCoachData();
+      }
+    },
     methods: {
+      /** 获取教练数据 */
+      getCoachData(){
+        this.$vux.loading.show();
+        this.$api.getCoachDetail({id: this.coach.id})
+          .then(resp => {
+            if(resp.success){
+              this.resolveCoachData(resp.result.tech);
+            }
+            this.$vux.loading.hide();
+          });
+      },
+
+      /** 教练数据处理 */
+      resolveCoachData(source){
+        const hash = Object.assign({}, source);
+
+        hash['gender'] = hash['gender'] ? 1 : 0;
+        hash['address'] = hash['address'].split(',');
+        hash['certificateLevel'] = [hash['certificateLevel']];
+
+        if(hash['birthdate']){
+          const oDate = new Date(hash['birthdate']);
+          const year = oDate.getFullYear();
+          const month = oDate.getMonth() + 1;
+
+          hash['birthdate'] = `${year}-${Utils.padZero(month)}`;
+        }
+
+        this.coach = Object.assign({}, this.coach, hash);
+      },
+
+      /** 提交加盟数据 */
       onCoachJoin(){
         if(this.validForm()){
           const params = this.mixField();
@@ -87,13 +127,17 @@
           this.$api.coachJoin(params)
             .then(resp => {
               if(resp.success){
-                this.$vux.toast.show({
+                const _this = this;
+
+                _this.$vux.toast.show({
                   type: 'success',
-                  text: '加盟成功！',
+                  text: this.coach.id ? '修改成功！' : '加盟成功！',
                   onHide(){
-                    this.$router.push({name: 'CoachQualify'});
+                    _this.$router.push({name: 'CoachQualify'});
                   },
                 });
+              }else{
+                this.$vux.toast.show('您已加盟过，请勿重复加盟！');
               }
             });
         }

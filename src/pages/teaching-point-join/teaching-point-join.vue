@@ -84,7 +84,7 @@
       <cell primary="content" title="储物柜：" value-align="left" align-items="flex-start">
         <m-radio :options="isStorageCabinet" v-model="point.isStorageCabinet"></m-radio>
       </cell>
-      <x-input title="相关认证：" v-model="point.certificate" placeholder="请输入认证资质"></x-input>
+      <x-input title="相关认证：" v-model="point.certificate" placeholder="请输入认证资质" :show-clear="false"></x-input>
       <cell primary="content" title="浅水区：" value-align="left" align-items="flex-start">
         <div class="cell-con">
           <div class="" style="padding-top: 0;">
@@ -103,7 +103,7 @@
     </group>
 
     <div class="padding-15">
-      <x-button :gradients="['#1D62F0', '#19D5FD']" @click.native="onPointJoin">加盟</x-button>
+      <x-button :gradients="['#1D62F0', '#19D5FD']" @click.native="onPointJoin">{{point.id ? '提交修改' : '加盟'}}</x-button>
     </div>
   </div>
 </template>
@@ -111,7 +111,8 @@
 <script>
   import {Group, XInput, Cell, PopupRadio, Datetime, XAddress, XTextarea, ChinaAddressV4Data, XButton, Spinner} from 'vux';
   import {MRadio, MCheckbox} from '@/components';
-  import {Utils, WxUtil} from '@/utils/utils';
+  import {Utils} from '@/utils/utils';
+  import {WxUtil} from '@/utils/wx-util';
 
   export default {
     name: 'teaching-point-join',
@@ -175,6 +176,7 @@
         addressList: ChinaAddressV4Data,
         addressNames: '',
         point: {
+          id: '',
           name: '',
           floatLocation: [],
           swimLocation: [],
@@ -192,8 +194,8 @@
           deepArea: '',
           description: '',
           licenseId: '',
-          lat: '',
-          lon: '',
+          // lat: '',
+          // lon: '',
         },
         image: {
           realSceneImageTokens: [],
@@ -204,14 +206,99 @@
       };
     },
     created(){
-      WxUtil.getUserLocation((resp) => {
-        if(resp){
-          this.point.lat = resp.lat;
-          this.point.lon = resp.lon;
-        }
-      });
+      this.point.id = this.$route.query.id;
+      // WxUtil.getUserLocation((resp) => {
+      //   if(resp){
+      //     this.point.lat = resp.lat;
+      //     this.point.lon = resp.lon;
+      //   }
+      // });
+    },
+    mounted(){
+      if(this.point.id){
+        this.getPointData();
+      }
     },
     methods: {
+      /** 获取教点数据 */
+      getPointData(){
+        this.$vux.loading.show();
+        this.$api.getPointDetail({id: this.point.id})
+          .then(resp => {
+            if(resp.success){
+              this.resolvePointData(resp.result);
+            }
+            this.$vux.loading.hide();
+          });
+      },
+
+      /** 处理编辑教点数据 */
+      resolvePointData(sourceData){
+        const source = sourceData.getTechPointForEditDto.techPoint;
+        const photosToken = sourceData.photos;
+        const targetHash = {
+          floatLocation: [],
+          swimLocation: [],
+        };
+
+        targetHash['name'] = source.name;
+        source.floatLocation.split('').forEach((it, idx) => {
+          if(+it === 1){
+            targetHash['floatLocation'].push(this.floatLocation[idx].value + '');
+          }
+        });
+        source.swimLocation.split('').forEach((it2, idx2) => {
+          if(+it2 === 1){
+            if(idx2 < 2){
+              targetHash['swimLocation'].push(this.swimLocation[idx2].value + '');
+            }else{
+              targetHash['isConstantTemp'] = it2;
+            }
+          }
+        });
+        targetHash['scale'] = source.scale;
+        targetHash['lifeguardQty'] = source.lifeguardQty;
+        targetHash['area'] = source.area;
+        targetHash['waterChangePeroid'] = source.waterChangePeroid;
+        targetHash['disinfectionMethod'] = source.disinfectionMethod;
+        targetHash['address'] = source.address.split(' ');
+        targetHash['isShowerRoom'] = source.isShowerRoom ? 1 : 0;
+        targetHash['isStorageCabinet'] = source.isStorageCabinet ? 1 : 0;
+        targetHash['certificate'] = source.certificate;
+        targetHash['shallowArea'] = source.shallowArea;
+        targetHash['deepArea'] = source.deepArea;
+        targetHash['description'] = source.description;
+        targetHash['licenseId'] = source.licenseId;
+
+        // 下载营业执照图片
+        this.image.licenseImageTokens.push(targetHash['licenseId']);
+        this.$api.downloadImage({id: targetHash['licenseId']})
+          .then(resp => {
+            if(resp.success){
+              const uriPrefix = `data:image/png;base64,${resp.result}`;
+
+              this.$set(this.image.licenseImageUris, 0, uriPrefix);
+            }
+          });
+
+        // 下载教点实景图片
+        photosToken.forEach((photo, idx) => {
+          // 教点实景图片ID
+          this.image.realSceneImageTokens.push(photo.sitePhototId);
+          this.$api.downloadImage({id: photo.sitePhototId})
+            .then(resp => {
+              if(resp.success){
+                const uriPrefix = `data:image/png;base64,${resp.result}`;
+
+                this.image.realSceneImageUris.push(uriPrefix);
+              }
+            });
+        });
+
+        this.point = Object.assign({}, this.point, targetHash);
+      },
+
+      /** 教点加盟 */
       onPointJoin(){
         if(this.validForm()){
           const params = this.mixParams();
@@ -219,26 +306,34 @@
           this.$api.teachingPointJoin(params)
             .then(resp => {
               if(resp.success){
-                // 绑定实景图片
-                this.$api.connectedSitePhotos({techPointId: resp.result, photoIds: this.image.realSceneImageTokens})
-                  .then(resp => {
-                    if(resp.success){
-                      const _this = this;
+                if(resp.result != 0){
+                  // 绑定实景图片
+                  this.$api.connectedSitePhotos({techPointId: resp.result, photoIds: this.image.realSceneImageTokens})
+                    .then(resp => {
+                      if(resp.success){
+                        const _this = this;
 
-                      _this.$vux.toast.show({
-                        type: 'success',
-                        text: '加盟成功！',
-                        onHide(){
-                          _this.$router.push({name: 'Index'});
-                        }
-                      });
-                    }
+                        _this.$vux.toast.show({
+                          type: 'success',
+                          text: this.point.id ? '修改成功！' : '加盟成功！',
+                          onHide(){
+                            _this.$router.push({name: 'Index'});
+                          }
+                        });
+                      }
+                    });
+                }else{
+                  _this.$vux.toast.show({
+                    type: 'error',
+                    text: '您已加盟过教点，请勿重复加盟！',
                   });
+                }
               }
             });
         }
       },
 
+      /** 字段处理 */
       mixParams(){
         let floatTemp = [0, 0, 0, 0];
         let swimTemp = [0, 0, 0];
