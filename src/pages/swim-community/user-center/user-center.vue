@@ -90,6 +90,7 @@
       };
     },
     computed: {
+      // 用户头像
       headImgUrl(){
         return window.localStorage.getItem('head_img');
       },

@@ -14,6 +14,6 @@ export const router = new Router({
 router.afterEach((to) => {
   setTimeout(() => {
     // 微信分享
-    // WxUtil.wxShare();
+    WxUtil.wxShare();
   }, 200);
 });

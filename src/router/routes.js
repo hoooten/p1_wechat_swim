@@ -39,7 +39,7 @@ const RouteWithCoach = [{
   component: CoachDetail,
   meta: {
     title: '教练资质详情',
-    urlName: 'CoachQualify',    // 点击返回键路由到指定页面
+    back: true,
   },
 }, {
   path: '/join',
@@ -71,7 +71,7 @@ const RouteWithCoach = [{
   component: TeachingPointDetail,
   meta: {
     title: '教点详情',
-    urlName: 'Index',
+    back: true,
   },
 }, {
   path: '/product/introduce',
@@ -88,7 +88,7 @@ const RouteWithCommunity = [{
     tabName: 'community_index',
     title: '皓思派-潜泳社区',
     module: 'community',        // 所属模块标识符
-    urlName: 'JoinIn',
+    urlName: 'JoinIn',          // 点击返回键路由到指定页面
   },
 }, {
   path: '/community/posting',

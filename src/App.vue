@@ -105,13 +105,13 @@
     },
     mounted(){
       // 开发环境登陆方式
-      this.$api.loginDemo({userNameOrEmailAddress: 'admin', password: '123qwe'})
-        .then(resp => {
-          if(resp.success){
-            window.localStorage.setItem('token', resp.result.accessToken);
-            window.localStorage.setItem('user_id', resp.result.userId);
-          }
-        });
+      // this.$api.loginDemo({userNameOrEmailAddress: 'admin', password: '123qwe'})
+      //   .then(resp => {
+      //     if(resp.success){
+      //       window.localStorage.setItem('token', resp.result.accessToken);
+      //       window.localStorage.setItem('user_id', resp.result.userId);
+      //     }
+      //   });
     },
     methods: {
       onBack(){
