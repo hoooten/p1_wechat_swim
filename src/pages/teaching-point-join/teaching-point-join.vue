@@ -194,8 +194,8 @@
           deepArea: '',
           description: '',
           licenseId: '',
-          // lat: '',
-          // lon: '',
+          lat: 0,
+          lon: 0,
         },
         image: {
           realSceneImageTokens: [],

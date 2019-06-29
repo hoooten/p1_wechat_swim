@@ -14,7 +14,7 @@
       <div class="menu-it">
         <img src="/static/images/common/icon-picture-blue.png">
         <span>图片</span>
-        <input type="file" class="file-ipt" accept="image/png,image/gif,image/jpeg" multiple="multiple" @change="onUploadImg"/>
+        <input type="file" class="file-ipt" accept="image/*" multiple="multiple" @change="onUploadImg"/>
       </div>
     </div>
 
