@@ -6,6 +6,7 @@ import JoinIn from '@/pages/join-menu/join-menu';
 import CoachJoin from '@/pages/coach-join/coach-join';
 import TeachingPointJoin from '@/pages/teaching-point-join/teaching-point-join';
 import TeachingPointDetail from '@/pages/teaching-point-detail/teaching-point-detail';
+import JoinHistory from '@/pages/join-history/join-history';
 
 import CommunityIndex from '@/pages/swim-community/index/community-index';
 import Posting from '@/pages/swim-community/posting/posting';
@@ -74,9 +75,13 @@ const RouteWithCoach = [{
     back: true,
   },
 }, {
-  path: '/product/introduce',
-  name: 'ProductIntroduce',
-  component: ProductIntroduce,
+  path: '/join/history',
+  name: 'JoinHistory',
+  component: JoinHistory,
+  meta: {
+    title: '加盟记录',
+    tabName: 'join_history',
+  },
 }];
 
 // 社区模块路由

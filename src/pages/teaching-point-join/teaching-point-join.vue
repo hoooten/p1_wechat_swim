@@ -207,12 +207,12 @@
     },
     created(){
       this.point.id = this.$route.query.id;
-      // WxUtil.getUserLocation((resp) => {
-      //   if(resp){
-      //     this.point.lat = resp.lat;
-      //     this.point.lon = resp.lon;
-      //   }
-      // });
+      WxUtil.getUserLocation((resp) => {
+        if(resp){
+          this.point.lat = resp.lat;
+          this.point.lon = resp.lon;
+        }
+      });
     },
     mounted(){
       if(this.point.id){
@@ -379,7 +379,7 @@
               }
               break;
             case 'swimLocation':
-              if(data['floatLocation'].length <= 0 && data['swimLocation']){
+              if(data['floatLocation'].length <= 0 && data['swimLocation'].length <= 0){
                 errMsg = '浮潜和游泳至少选择一项';
                 unError = false;
               }
