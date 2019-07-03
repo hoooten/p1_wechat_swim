@@ -52,7 +52,7 @@
               </div>
             </li>
             <li class="upd-btn">
-              <input type="file" class="file-ipt" accept="image/png,image/gif,image/jpeg" multiple="multiple" @change="onUploadImg($event, 'scene')"/>
+              <input type="file" class="file-ipt" accept="image/*" multiple="multiple" @change="onUploadImg($event, 'scene')"/>
             </li>
           </ul>
         </div>
@@ -73,7 +73,7 @@
               </div>
             </li>
             <li class="upd-btn" v-if="image.licenseImageUris.length < 1">
-              <input type="file" class="file-ipt" accept="image/png,image/gif,image/jpeg" @change="onUploadImg($event, 'licence')"/>
+              <input type="file" class="file-ipt" accept="image/*" @change="onUploadImg($event, 'licence')"/>
             </li>
           </ul>
         </div>
