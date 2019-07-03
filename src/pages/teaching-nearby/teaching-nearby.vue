@@ -6,7 +6,7 @@
         :cover="pointAvatars[idx]"
         :title="itm.techPoint.name"
         @on-click="onLink2Deatil(itm.techPoint.id)">
-        <div class="point-addr" slot="content">
+        <div class="point-addr" slot="content" @click="onShowMap(itm.techPoint.lat, itm.techPoint.lon, itm.techPoint.address)">
           <p>{{itm.techPoint.address}}</p>
         </div>
       </m-panel>
@@ -119,7 +119,12 @@
               });
           }
         });
-      }
+      },
+
+      /** 显示地图 */
+      onShowMap(lat, lon, addr){
+        WxUtil.openMap(lat, lon, addr);
+      },
     },
   }
 </script>

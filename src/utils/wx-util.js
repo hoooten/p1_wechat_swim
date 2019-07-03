@@ -58,6 +58,25 @@ export const WxUtil = {
     });
   },
 
+  /** 打开微信内置地图 */
+  openMap(lat, lon, address){
+    WxUtil._init().then(() => {
+      wx.openLocation({
+        latitude: lat,    // 纬度，浮点数，范围为90 ~ -90
+        longitude: lon,   // 经度，浮点数，范围为180 ~ -180。
+        name: address,    // 位置名
+        address: address, // 地址详情说明
+        scale: 10,        // 地图缩放级别,整形值,范围从1~28。默认为最大
+        infoUrl: ''       // 在查看位置界面底部显示的超链接,可点击跳转
+      });
+    }).catch(err => {
+      Vue.$vux.alert.show({
+        content: JSON.stringify(err),
+      });
+      Vue.$vux.loading.hide();
+    });
+  },
+
   /** 微信授权获取用户code */
   wxAuth(callback){
     WxUtil._init().then(resp => {

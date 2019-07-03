@@ -128,7 +128,7 @@
             let pageYScroll = window.pageYOffset || document.documentElement.scrollTop;
             let rect = thumbnail.getBoundingClientRect();
 
-            return {x: rect.left, y: rect.top + pageYScroll, w: rect.width};
+            return {x: rect.left, y: rect.top + pageYScroll};
           },
         },
       };
@@ -177,8 +177,6 @@
                 const uri = `data:image/png;base64,${resp.result}`;
                 const imgHash = {
                   src: uri,
-                  w: 600,
-                  h: 500
                 };
 
                 _this.posting.imagesList.push(uri);

@@ -197,8 +197,6 @@ export class ApiService{
 
 /** post请求 */
 function post(mUrl, query) {
-  // const params = Object.assign({}, query, {userId: window.localStorage.getItem('user_id')});
-
   return http.doPost(mUrl, query).then(resolve => {
     const resp = resolve.data;
 
@@ -221,8 +219,6 @@ function post(mUrl, query) {
 
 /** get请求 */
 function get(mUrl, query) {
-  // const params = Object.assign({}, query, {userId: window.localStorage.getItem('user_id')});
-
   return http.doGet(mUrl, query).then(resolve => {
     const resp = resolve.data;
 
@@ -245,8 +241,6 @@ function get(mUrl, query) {
 
 /** delete请求处理 */
 function doDelete(mUrl, query) {
-  // const params = Object.assign({}, query, {userId: window.localStorage.getItem('user_id')});
-
   return http.doDelete(mUrl, query).then(resolve => {
     const resp = resolve.data;
 
@@ -296,10 +290,6 @@ function imageUpload(formData) {
 /** 图片下载 */
 function downloadImage(params) {
   const downloadUrl = 'http://www.hoooten.com:22743/File/DownloadImg';
-  // const head = {
-  //   'Content-Type': 'application/json',
-  //   'Authorization': `Bearer ${window.localStorage.getItem('token')}`,
-  // };
 
   return axios.get(downloadUrl, {params: params}).then(resolve => {
     const resp = resolve.data;

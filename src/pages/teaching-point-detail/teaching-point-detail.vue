@@ -10,17 +10,14 @@
             <div class="mg-b-5">浮潜：</div>
             <div>
               {{floatLocation}}
-              <!--<m-checkbox :options="floatLocation" v-model="point.floatLocation"></m-checkbox>-->
             </div>
           </div>
           <div class="mg-b-10">
             <div class="mg-b-5">游泳：</div>
             <div class="mg-b-5">
               {{poolType}}
-              <!--<m-checkbox :options="swimLocation" v-model="point.swimLocation"></m-checkbox>-->
             </div>
             <span>{{constantTemperature ? '恒温' : '不恒温'}}</span>
-            <!--<m-radio :options="constantTemperature" v-model="point.isConstantTemp"></m-radio>-->
           </div>
         </div>
       </cell>
@@ -39,12 +36,12 @@
       </cell>
       <cell primary="content" title="场所实景：" align-items="flex-start">
         <div class="img-box">
-          <img class="preview-img" data-img="scene" v-for="(imgUrl, idx) of sceneImages" @click="onViewImage(idx)" :src="`data:image/png;base64,${imgUrl}`">
+          <img class="preview-img post-img" data-img="scene" v-for="(imgUrl, idx) of sceneImages" @click="onViewImage(idx, 'scene')" :src="`data:image/png;base64,${imgUrl}`">
         </div>
       </cell>
       <cell primary="content" title="营业执照：" align-items="flex-start">
         <div class="img-box">
-          <img class="preview-img" @click="onViewImage(0)" data-img="license" :src="`data:image/png;base64,${licenseBase64}`">
+          <img class="preview-img" @click="onViewImage(0, 'licence')" data-img="license" :src="`data:image/png;base64,${licenseBase64}`">
         </div>
       </cell>
       <cell primary="content" title="冲凉房：">
@@ -67,11 +64,19 @@
       </cell>
     </group>
 
-    <!-- 图片预览 -->
+    <!-- 实景图片预览 -->
     <div v-transfer-dom>
       <previewer
-        :list="imgList"
         ref="previewer"
+        :list="imgList"
+        :options="imgPreviewOptions"></previewer>
+    </div>
+
+    <!-- 营业执照图片预览 -->
+    <div v-transfer-dom>
+      <previewer
+        ref="licencePreviewer"
+        :list="licenceImgList"
         :options="imgPreviewOptions"></previewer>
     </div>
   </div>
@@ -89,6 +94,10 @@
     components: {
       Cell,
       Group,
+      Previewer,
+    },
+    directives: {
+      TransferDom,
     },
     data(){
       return {
@@ -100,36 +109,14 @@
         licenseBase64: '',
         sceneImages: [],
         imgList: [],
+        licenceImgList: [],
         imgPreviewOptions: {
           getThumbBoundsFn: function (index) {
             const thumbnail = document.querySelectorAll('.post-img')[index];
-            const imgType = thumbnail.dataset.img;
             const pageYScroll = window.pageYOffset || document.documentElement.scrollTop;
             const rect = thumbnail.getBoundingClientRect();
 
-            if (imgType === 'scene') {
-              this.sceneImages.forEach((uri, idx) => {
-                const imgHash = {
-                  src: uri,
-                  w: 600,
-                  h: 500
-                };
-
-                this.imgList = [];
-                this.imgList.push(imgHash);
-              });
-            }else{
-              const imgHash = {
-                src: this.licenseBase64,
-                w: 600,
-                h: 500
-              };
-
-              this.imgList = [];
-              this.imgList.push(imgHash);
-            }
-
-            return {x: rect.left, y: rect.top + pageYScroll, w: rect.width};
+            return {x: rect.left, y: rect.top + pageYScroll};
           },
         },
       };
@@ -156,6 +143,7 @@
               this.$api.downloadImage({id: resp.result.getTechPointForEditDto.techPoint.licenseId})
                 .then(resp => {
                   this.licenseBase64 = resp.result;
+                  this.licenceImgList.push({src: `data:image/png;base64,${resp.result}`})
                 });
             }
             this.$vux.loading.hide();
@@ -196,13 +184,18 @@
           this.$api.downloadImage({id: it.sitePhototId})
             .then(resp => {
               this.sceneImages.push(resp.result);
+              this.imgList.push({src: `data:image/png;base64,${resp.result}`});
             });
         });
       },
 
       /** 预览图片 */
-      onViewImage(idx){
-        this.$refs.previewer.show(idx);
+      onViewImage(idx, imgType){
+        if(imgType === 'scene'){
+          this.$refs.previewer.show(idx);
+        }else{
+          this.$refs.licencePreviewer.show(idx);
+        }
       },
     },
   }

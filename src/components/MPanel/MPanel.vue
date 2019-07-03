@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="p-row" @click="onClick()">
-      <div class="p-col-l">
+    <div class="p-row">
+      <div class="p-col-l" @click="onClick()">
         <img class="img-position-center" :src="cover">
       </div>
       <div class="p-col-r">
-        <div class="main-con text-overflow">
+        <div class="main-con text-overflow" @click="onClick()">
           <slot name="title">{{title}}</slot>
         </div>
         <div class="sub-con">
