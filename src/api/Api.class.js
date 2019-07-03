@@ -12,7 +12,7 @@ export class ApiService{
 
   /** 获取公众号配置信息 */
   getWechatConfig(params = {}){
-    const mUrl = 'http://hoooten.com:22743/WechatUi/UsingGetJSSDKJson';
+    const mUrl = 'http://www.hoooten.com:22743/WechatUi/UsingGetJSSDKJson';
 
     return getWechatConfig(mUrl, params);
   }

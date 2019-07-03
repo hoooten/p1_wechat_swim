@@ -30,7 +30,7 @@
           </div>
         </li>
         <li class="upd-btn" v-if="imageUris.length > 0">
-          <input type="file" class="file-ipt" accept="image/png,image/gif,image/jpeg" multiple="multiple" @change="onUploadImg"/>
+          <input type="file" class="file-ipt" accept="image/*" multiple="multiple" @change="onUploadImg"/>
         </li>
       </ul>
     </div>
