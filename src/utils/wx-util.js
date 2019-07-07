@@ -21,7 +21,7 @@ export const WxUtil = {
               nonceStr: config.nonceStr,        // 必填，生成签名的随机串
               signature: config.signature,      // 必填，签名，见附录1
               // 必填，需要使用的JS接口列表
-              jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone', 'getLocation'],
+              jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone', 'getLocation', 'openLocation'],
             });
 
             wx.ready(function () {
