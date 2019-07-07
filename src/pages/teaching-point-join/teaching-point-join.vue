@@ -39,6 +39,8 @@
       </cell>
       <popup-radio title="消毒方式：" :options="disinfectionMethod" v-model="point.disinfectionMethod" :columns="1" placeholder="请选择消毒方式" value-align="left"></popup-radio>
       <x-address title="地址" :list="addressList" @on-shadow-change="onGetAddress" v-model="point.address" placeholder="请选择地址" value-text-align="left"></x-address>
+      <x-textarea title="详细地址" :height="50" v-model="point.addressDetail" placeholder="请输入详细地址"></x-textarea>
+
       <cell primary="content" title="场所实景：" align-items="flex-start">
         <div class="img-box">
           <ul class="img-row">
@@ -187,6 +189,7 @@
           waterChangePeroid: '',
           disinfectionMethod: '',
           address: [],
+          addressDetail: '',
           isShowerRoom: 0,
           isStorageCabinet: 0,
           certificate: '',
@@ -261,7 +264,8 @@
         targetHash['area'] = source.area;
         targetHash['waterChangePeroid'] = source.waterChangePeroid;
         targetHash['disinfectionMethod'] = source.disinfectionMethod;
-        targetHash['address'] = source.address.split(' ');
+        targetHash['address'] = source.address.split('$')[0].split(' ');
+        targetHash['addressDetail'] = source.address.split('$')[1];
         targetHash['isShowerRoom'] = source.isShowerRoom ? 1 : 0;
         targetHash['isStorageCabinet'] = source.isStorageCabinet ? 1 : 0;
         targetHash['certificate'] = source.certificate;
@@ -352,7 +356,7 @@
         }
         query['floatLocation'] = floatTemp.join('');
         query['swimLocation'] = swimTemp.join('');
-        query['address'] = this.addressNames.join(' ');
+        query['address'] = this.addressNames.join(' ') + '$' + query.addressDetail;
         query['isShowerRoom'] = Number(this.point['isShowerRoom']) === 1 ? true : false;
         query['isStorageCabinet'] = Number(this.point['isStorageCabinet']) === 1 ? true : false;
         query['licenseId'] = this.image.licenseImageTokens[0];
@@ -417,6 +421,12 @@
             case 'address':
               if(data[k].length <= 0){
                 errMsg = '请选择地址';
+                unError = false;
+              }
+              break;
+            case 'addressDetail':
+              if(!data[k]){
+                errMsg = '请输入详细地址';
                 unError = false;
               }
               break;

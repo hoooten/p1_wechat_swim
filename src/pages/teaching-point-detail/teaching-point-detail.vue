@@ -34,6 +34,9 @@
       <cell primary="content" title="消毒方式：">
         <div class="content">{{disinfection[point.disinfectionMethod - 1]}}</div>
       </cell>
+      <cell primary="content" title="地址：">
+        <div class="content">{{point.address.replace('$', ' ')}}</div>
+      </cell>
       <cell primary="content" title="场所实景：" align-items="flex-start">
         <div class="img-box">
           <img class="preview-img post-img" data-img="scene" v-for="(imgUrl, idx) of sceneImages" @click="onViewImage(idx, 'scene')" :src="`data:image/png;base64,${imgUrl}`">

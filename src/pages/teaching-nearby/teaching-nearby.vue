@@ -7,7 +7,7 @@
         :title="itm.techPoint.name"
         @on-click="onLink2Deatil(itm.techPoint.id)">
         <div class="point-addr" slot="content" @click="onShowMap(itm.techPoint.lat, itm.techPoint.lon, itm.techPoint.address)">
-          <p>{{itm.techPoint.address}}</p>
+          <p>{{itm.techPoint.address.replace('$', ' ')}}</p>
         </div>
       </m-panel>
     </div>
