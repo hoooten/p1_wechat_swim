@@ -8,7 +8,7 @@
     <router-view></router-view>
 
     <div v-if="tabName">
-      <tabbar v-if="!module">
+      <tabbar v-show="!module">
         <tabbar-item :selected="tabName === 'teach_point_nearby'" link="/">
           <img slot="icon" v-if="tabName === 'teach_point_nearby'" src="/static/images/bottom-tab/icon-location-blue.png">
           <img slot="icon" v-else src="/static/images/bottom-tab/icon-location-grey.png">
@@ -19,19 +19,25 @@
           <img slot="icon" v-else src="/static/images/bottom-tab/icon-qualify-grey.png">
           <span slot="label">教练资质</span>
         </tabbar-item>
+
+        <tabbar-item :selected="tabName === 'null'" link="/community/index">
+          <img slot="icon" src="/static/images/bottom-tab/icon-index-grey.png">
+          <span slot="label">社区首页</span>
+        </tabbar-item>
+
         <tabbar-item :selected="tabName === 'coach_join'" link="/join">
           <img slot="icon" v-if="tabName === 'coach_join'" src="/static/images/bottom-tab/icon-join-blue.png">
           <img slot="icon" v-else src="/static/images/bottom-tab/icon-join-grey.png">
           <span slot="label">加盟</span>
         </tabbar-item>
-        <tabbar-item :selected="tabName === 'join_history'" link="/join/history">
-          <img slot="icon" v-if="tabName === 'join_history'" src="/static/images/bottom-tab/icon-center-blue.png">
+        <tabbar-item :selected="tabName === 'com_center'" link="/user-center">
+          <img slot="icon" v-if="tabName === 'com_center'" src="/static/images/bottom-tab/icon-center-blue.png">
           <img slot="icon" v-else src="/static/images/bottom-tab/icon-center-grey.png">
-          <span slot="label">加盟记录</span>
+          <span slot="label">个人中心</span>
         </tabbar-item>
       </tabbar>
 
-      <tabbar v-if="module">
+      <tabbar v-show="module">
         <tabbar-item :selected="tabName === 'community_index'" link="/community/index">
           <img v-if="tabName === 'community_index'" slot="icon" src="/static/images/bottom-tab/icon-index-blue.png">
           <img v-else slot="icon" src="/static/images/bottom-tab/icon-index-grey.png">
@@ -42,10 +48,10 @@
           <img v-else slot="icon" src="/static/images/bottom-tab/icon-edit-grey.png">
           <span slot="label">发帖</span>
         </tabbar-item>
-        <tabbar-item :selected="tabName === 'com_center'" link="/community/user-center">
+        <tabbar-item :selected="tabName === 'com_center'" link="/user-center">
           <img v-if="tabName === 'com_center'" slot="icon" src="/static/images/bottom-tab/icon-center-blue.png">
           <img v-else slot="icon" src="/static/images/bottom-tab/icon-center-grey.png">
-          <span slot="label">个人中心</span>
+          <span slot="label">社区个人中心</span>
         </tabbar-item>
       </tabbar>
     </div>

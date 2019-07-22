@@ -1,50 +1,7 @@
 <template>
   <div>
     <div v-if="techPointData || !coachData">
-      <div class="edit-item" v-if="techPointData">
-        <div class="edit-title">
-          <h3 style="border-color: #6ebb27;">教点编辑</h3>
-        </div>
-        <m-panel
-          :cover="techPointCover"
-          :title="techPointData.techPoint.name"
-          @on-click="onLink2PointDetail(techPointData.techPoint.id)">
-          <div class="slt-con" slot="content">
-            <div style="flex: 8;">
-              <span>{{techPointData.techPoint.address}}</span>
-            </div>
-            <div style="flex: 2; text-align: right">
-              <span class="edit-btn" style="background: #6ebb27;" @click="onToEdit(techPointData.techPoint.id, 'TeachingPointJoin', '教点编辑')">编辑</span>
-            </div>
-          </div>
-        </m-panel>
-      </div>
 
-      <div class="edit-item" v-if="coachData">
-        <div class="edit-title">
-          <h3 style="border-color: #0097FF;">教练信息编辑</h3>
-        </div>
-        <m-panel
-          :cover="headImgUrl"
-          :title="coachData.tech.name"
-          @on-click="onLink2Detail(coachData.tech.id)">
-          <div class="slt-con" slot="content">
-            <div style="flex: 8;">
-              <span class="star-group">
-                <img v-for="i in 3" src="/static/images/common/icon-star-yellow.png">
-              </span>
-              <span>{{coachData.tech.certificateLevel}}</span>
-            </div>
-            <div style="flex: 2; text-align: right">
-              <span class="edit-btn" style="background: #0097FF;" @click="onToEdit(coachData.tech.id, 'CoachJoin', '教练编辑')">编辑</span>
-            </div>
-          </div>
-        </m-panel>
-      </div>
-    </div>
-
-    <div v-else class="non-history">
-      <load-more tip="暂无加盟记录" :show-loading="false"></load-more>
     </div>
   </div>
 </template>
@@ -131,43 +88,5 @@
 </script>
 
 <style lang="less" scoped>
-  .edit-item{
-    padding-top: 10px;
-    margin-top: 10px;
-    background: #fff;
 
-    .edit-title{
-      padding-left: 15px;
-
-      h3{
-        height: 18px;
-        line-height: 18px;
-        padding-left: 10px;
-        font-size: 16px;
-        border-left: 3px solid @bg-green;
-      }
-    }
-  }
-
-  .star-group{
-    margin-right: 10px;
-
-    img{
-      width: 18px;
-      height: 18px;
-      vertical-align: top;
-    }
-  }
-  .slt-con{
-    display: flex;
-
-    .edit-btn{
-      display: inline-block;
-      padding: 2px 10px;
-      font-size: 16px;
-      color: #fff;
-      vertical-align: middle;
-      border-radius: 2px;
-    }
-  }
 </style>

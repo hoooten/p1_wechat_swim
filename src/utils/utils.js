@@ -90,6 +90,6 @@ export const Utils = {
     // 图片转blod格式上传
     canvas.toBlob(function (blod) {
       callback ? callback(blod) : null; // 调用回调函数
-    }, 'image/jpeg', 0.7);
+    }, 'image/jpeg', 0.85);
   },
 };

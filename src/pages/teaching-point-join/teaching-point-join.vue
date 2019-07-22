@@ -38,9 +38,12 @@
         </div>
       </cell>
       <popup-radio title="消毒方式：" :options="disinfectionMethod" v-model="point.disinfectionMethod" :columns="1" placeholder="请选择消毒方式" value-align="left"></popup-radio>
-      <x-address title="地址" :list="addressList" @on-shadow-change="onGetAddress" v-model="point.address" placeholder="请选择地址" value-text-align="left"></x-address>
-      <x-textarea title="详细地址" :height="50" v-model="point.addressDetail" placeholder="请输入详细地址"></x-textarea>
+      <!--<x-address title="地址" :list="addressList" @on-shadow-change="onGetAddress" v-model="point.address" placeholder="请选择地址" value-text-align="left"></x-address>-->
+      <!--<x-textarea title="详细地址" :height="50" v-model="point.addressDetail" placeholder="请输入详细地址"></x-textarea>-->
 
+      <cell primary="content" title="地址：" align-items="flex-start" value-align="left" is-link>
+        <div @click="isShowMap = true">{{point.address ? point.address : '请选择地址'}}</div>
+      </cell>
       <cell primary="content" title="场所实景：" align-items="flex-start">
         <div class="img-box">
           <ul class="img-row">
@@ -107,6 +110,8 @@
     <div class="padding-15">
       <x-button :gradients="['#1D62F0', '#19D5FD']" @click.native="onPointJoin">{{point.id ? '提交修改' : '加盟'}}</x-button>
     </div>
+
+    <gaode-map :show="isShowMap" @on-get-address="onGetAddressFromMap"></gaode-map>
   </div>
 </template>
 
@@ -115,6 +120,7 @@
   import {MRadio, MCheckbox} from '@/components';
   import {Utils} from '@/utils/utils';
   import {WxUtil} from '@/utils/wx-util';
+  import GaodeMap from './components/GaodeMap';
 
   export default {
     name: 'teaching-point-join',
@@ -130,9 +136,11 @@
       MRadio,
       MCheckbox,
       Spinner,
+      GaodeMap,
     },
     data(){
       return {
+        isShowMap: false,
         floatLocation: [
           {
             value: 0,
@@ -188,8 +196,8 @@
           area: '',
           waterChangePeroid: '',
           disinfectionMethod: '',
-          address: [],
-          addressDetail: '',
+          address: '',
+          // addressDetail: '',
           isShowerRoom: 0,
           isStorageCabinet: 0,
           certificate: '',
@@ -264,8 +272,9 @@
         targetHash['area'] = source.area;
         targetHash['waterChangePeroid'] = source.waterChangePeroid;
         targetHash['disinfectionMethod'] = source.disinfectionMethod;
-        targetHash['address'] = source.address.split('$')[0].split(' ');
-        targetHash['addressDetail'] = source.address.split('$')[1];
+        targetHash['address'] = source.address;
+        // targetHash['address'] = source.address.split('$')[0].split(' ');
+        // targetHash['addressDetail'] = source.address.split('$')[1];
         targetHash['isShowerRoom'] = source.isShowerRoom ? 1 : 0;
         targetHash['isStorageCabinet'] = source.isStorageCabinet ? 1 : 0;
         targetHash['certificate'] = source.certificate;
@@ -356,7 +365,7 @@
         }
         query['floatLocation'] = floatTemp.join('');
         query['swimLocation'] = swimTemp.join('');
-        query['address'] = this.addressNames.join(' ') + '$' + query.addressDetail;
+        // query['address'] = this.addressNames.join(' ') + '$' + query.addressDetail;
         query['isShowerRoom'] = Number(this.point['isShowerRoom']) === 1 ? true : false;
         query['isStorageCabinet'] = Number(this.point['isStorageCabinet']) === 1 ? true : false;
         query['licenseId'] = this.image.licenseImageTokens[0];
@@ -366,6 +375,16 @@
 
       onGetAddress(ids, names){
         this.addressNames = names;
+      },
+
+      /** 从地图获取地址 */
+      onGetAddressFromMap(addr){
+        const latAndLon = addr.location.split(',');
+
+        this.isShowMap = false;
+        this.point.address = `${addr.name} ${addr.address}`;
+        this.point.lon = latAndLon[0];
+        this.point.lat = latAndLon[1];
       },
 
       /** 必填项校验 */
@@ -419,7 +438,11 @@
               }
               break;
             case 'address':
-              if(data[k].length <= 0){
+              // if(data[k].length <= 0){
+              //   errMsg = '请选择地址';
+              //   unError = false;
+              // }
+              if(!data[k]){
                 errMsg = '请选择地址';
                 unError = false;
               }

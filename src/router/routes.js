@@ -7,12 +7,12 @@ import CoachJoin from '@/pages/coach-join/coach-join';
 import TeachingPointJoin from '@/pages/teaching-point-join/teaching-point-join';
 import TeachingPointDetail from '@/pages/teaching-point-detail/teaching-point-detail';
 import JoinHistory from '@/pages/join-history/join-history';
+import UserCenter from '@/pages/user-center/user-center';
+import PostingHistory from '@/pages/user-center/posting-history';
 
 import CommunityIndex from '@/pages/swim-community/index/community-index';
 import Posting from '@/pages/swim-community/posting/posting';
 import PostingDetail from '@/pages/swim-community/posting-detail/posting-detail';
-import UserCenter from '@/pages/swim-community/user-center/user-center';
-import PostingHistory from '@/pages/swim-community/user-center/posting-history';
 
 // 教点、教练模块路由
 const RouteWithCoach = [{
@@ -74,13 +74,29 @@ const RouteWithCoach = [{
     title: '教点详情',
     back: true,
   },
-}, {
+},/* {
   path: '/join/history',
   name: 'JoinHistory',
   component: JoinHistory,
   meta: {
     title: '加盟记录',
     tabName: 'join_history',
+  },
+},*/ {
+  path: '/user-center',
+  name: 'UserCenter',
+  component: UserCenter,
+  meta: {
+    tabName: 'com_center',
+    title: '个人中心',
+  },
+}, {
+  path: '/user/posting-history/:id',
+  name: 'PostingHistory',
+  component: PostingHistory,
+  meta: {
+    title: '我的发帖',
+    urlName: 'UserCenter',
   },
 }];
 
@@ -93,7 +109,7 @@ const RouteWithCommunity = [{
     tabName: 'community_index',
     title: '皓思派-潜泳社区',
     module: 'community',        // 所属模块标识符
-    urlName: 'JoinIn',          // 点击返回键路由到指定页面
+    urlName: 'Index',          // 点击返回键路由到指定页面
   },
 }, {
   path: '/community/posting',
@@ -113,7 +129,7 @@ const RouteWithCommunity = [{
     module: 'community',
     urlName: 'CommunityIndex',
   },
-}, {
+}, /*{
   path: '/community/user-center',
   name: 'UserCenter',
   component: UserCenter,
@@ -131,6 +147,6 @@ const RouteWithCommunity = [{
     module: 'community',
     urlName: 'UserCenter',
   },
-}];
+}*/];
 
 export const Routes = [...RouteWithCoach, ...RouteWithCommunity];
