@@ -42,9 +42,9 @@
         </m-panel>
       </div>
 
-      <div class="padding-15 grid-box" v-if="(coachData && !coachData.tech) || (techPointData && !techPointData.techPoint)">
-        <router-link v-if="coachData && !coachData.tech" to="/join/coach" class="block-card bg-red">教练加盟</router-link>
-        <router-link v-if="techPointData && !techPointData.techPoint" to="/join/point" class="block-card bg-green">教点加盟</router-link>
+      <div class="padding-15 grid-box" v-if="isCoachJoin == 0 || isPointJoin == 0">
+        <router-link v-if="isCoachJoin == 0" to="/join/coach" class="block-card bg-red">教练加盟</router-link>
+        <router-link v-if="isPointJoin == 0" to="/join/point" class="block-card bg-green">教点加盟</router-link>
       </div>
     </div>
   </div>
@@ -64,6 +64,8 @@
         techPointData: null,
         techPointCover: '',
         coachData: null,
+        isCoachJoin: 0,
+        isPointJoin: 0,
       };
     },
     computed: {
@@ -74,6 +76,7 @@
     },
     created(){
       this.getJoinData();
+      this.checkUserJoinStatus();
     },
     methods: {
       getJoinData(){
@@ -98,6 +101,18 @@
           .then(resp => {
             if(resp.success){
               this.coachData = resp.result.items[0];
+            }
+          });
+      },
+
+      /** 校验用户是否有加盟记录 */
+      checkUserJoinStatus(){
+        this.$api.checkUserJoinStatus()
+          .then(resp => {
+            console.log(resp);
+            if(resp.success){
+              this.isPointJoin = resp.result.IsJoinInPoint;
+              this.isCoachJoin = resp.result.IsJoinAsTech;
             }
           });
       },

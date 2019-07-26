@@ -116,6 +116,13 @@ export class ApiService{
     return get(mUrl, params);
   }
 
+  /** 判断用户是否有加盟记录 */
+  checkUserJoinStatus(params = {}){
+    const mUrl = 'services/app/User/GetJoinStatus';
+
+    return get(mUrl, params);
+  }
+
   /***** 临时接口：新增帖子类别 *****/
   // addPostingSection(params = {}){
   //   const mUrl = 'services/app/CommunitySections/CreateOrEdit';
