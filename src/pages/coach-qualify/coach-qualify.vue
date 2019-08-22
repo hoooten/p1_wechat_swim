@@ -1,16 +1,26 @@
 <template>
   <div>
-    <div class="margin-bottom-10" v-for="(itm, idx) of coachList" :key="idx">
+    <div class="coach-list">
       <m-panel
-        cover="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1555756856972&di=1f518038bd435d8a5d1a4dde33290d9e&imgtype=0&src=http%3A%2F%2Fimg.mp.sohu.com%2Fupload%2F20170515%2Fc9bafe1fc7fa440183d8ddef6b24a55a_th.png"
-        :title="itm.tech.name"
+        v-for="(itm, idx) of coachList"
+        :key="idx"
+        is-set-border
         @on-click="onLink2Detail(itm.tech.id)">
-        <div class="slt-con" slot="content">
-          <span class="star-group">
-            <img v-for="i in 3" src="/static/images/common/icon-star-yellow.png">
-          </span>
-          <span>{{itm.tech.certificateLevel}}</span>
+        <div class="coach-avatar" slot="left-flex">
+          <img class="img-position-center" :src="itm.userPhoto">
         </div>
+
+        <div class="base-dt" slot="title">
+          <div class="left-sp">
+            <strong>{{itm.tech.name}}</strong>
+            <span>{{itm.tech.certificateLevel}}教练</span>
+          </div>
+          <div class="right-sp">
+            <stars :score="itm.averageScore"></stars>
+          </div>
+        </div>
+
+        <div class="slt-con" slot="content">性别：{{itm.tech.gender ? '男' : '女'}}，{{itm.tech.profile}}</div>
       </m-panel>
     </div>
 
@@ -22,7 +32,7 @@
 </template>
 
 <script>
-  import {MPanel} from '@/components';
+  import {MPanel, Stars} from '@/components';
   import {LoadMore} from 'vux';
 
   export default {
@@ -30,6 +40,7 @@
     components: {
       MPanel,
       LoadMore,
+      Stars,
     },
     data(){
       return {
@@ -93,6 +104,10 @@
 </script>
 
 <style lang="less" scoped>
+  .coach-list{
+    margin-top: 10px;
+    background: #fff;
+  }
   .star-group{
     margin-right: 10px;
 
@@ -101,5 +116,45 @@
       height: 18px;
       vertical-align: top;
     }
+  }
+  .coach-avatar{
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+
+    img{
+      width: 100%;
+      min-height: 50px;
+      border-radius: 50%;
+    }
+  }
+  .base-dt{
+    display: flex;
+
+    .left-sp{
+      flex: 2;
+
+      span{
+        margin-left: 10px;
+        color: #999;
+        font-size: 12px;
+      }
+    }
+    .right-sp{
+      flex: 1;
+      text-align: right;
+
+      img{
+        width: 10px;
+        height: auto;
+        vertical-align: middle;
+      }
+    }
+  }
+  .slt-con{
+    max-height: 36px;
+    color: #666;
+    font-size: 12px;
+    overflow: hidden;
   }
 </style>

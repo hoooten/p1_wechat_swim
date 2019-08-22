@@ -1,0 +1,173 @@
+.head-banner{
+  padding: 13px;
+  background: #fff;
+
+  .head-cover{
+    position: relative;
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+
+    img{
+      width: 100%;
+      min-height: 160px;
+      vertical-align: middle;
+    }
+    .cover-count{
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      min-width: 30px;
+      height: 30px;
+      line-height: 30px;
+      color: #fff;
+      font-size: 10px;
+      overflow: hidden;
+      text-align: center;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  .point-title-bar{
+    margin-top: 13px;
+    font-size: 0;
+
+    strong{
+      margin-right: 12px;
+      font-size: 15px;
+      vertical-align: middle;
+    }
+    img{
+      width: 13px;
+      height: auto;
+      vertical-align: middle;
+    }
+  }
+
+  .point-addr-bar{
+    margin-top: 14px;
+    font-size: 0px;
+    overflow: hidden;
+    white-space: nowrap;
+
+    span{
+      color: #999;
+      font-size: 12px;
+    }
+    & > span:nth-of-type(2){
+      margin: 0 10px;
+    }
+  }
+
+  .feat-sp-wrp{
+    margin-top: 14px;
+    font-size: 0;
+
+    .feature-it{
+      display: inline-block;
+      min-width: 55px;
+      height: 25px;
+      line-height: 25px;
+      margin: 0 12px 12px 0;
+      color: #5977EE;
+      font-size: 12px;
+      text-align: center;
+      border-radius: 3px;
+      background: #E0E4FF;
+    }
+  }
+
+  .point-oper-row{
+    display: flex;
+    padding-top: 14px;
+    margin-top: 14px;
+    border-top: 1px solid #E5E5E5;
+
+    .oper-item{
+      flex: 1;
+      text-align: center;
+      font-size: 0;
+
+      img{
+        width: 14px;
+        height: auto;
+        margin-right: 8px;
+        vertical-align: middle;
+      }
+      span{
+        font-size: 14px;
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+.mg-wrp{
+  margin-top: 10px;
+  padding: 15px 12px;
+
+  .pop-title{
+    position: relative;
+    padding-left: 9px;
+    font-size: 15px;
+
+    &::before{
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      margin-top: -5px;
+      width: 2px;
+      height: 10px;
+      background: #5974EE;
+    }
+  }
+  .pop-content{
+    padding: 15px 0;
+    font-size: 0;
+
+    .fee-sp{
+      display: inline-block;
+      width: 76px;
+      height: 25px;
+      line-height: 25px;
+      margin-right: 13px;
+      color: #666;
+      font-size: 12px;
+      text-align: center;
+      border: 1px solid #D2D2D2;
+      border-radius: 3px;
+
+      &.on{
+        color: #597AEE;
+        border-color: #597AEE;
+      }
+    }
+    .fee-tips{
+      margin-top: 15px;
+      color: #999;
+      font-size: 12px;
+    }
+
+    .staff-count{
+      margin-right: 25px;
+      color: #666;
+      font-size: 12px;
+    }
+    .licence-img{
+      width: 87px;
+      height: 60px;
+      overflow: hidden;
+
+      img{
+        width: 100%;
+        min-height: 60px;
+      }
+    }
+    .point-intro{
+      color: #666;
+      font-size: 13px;
+    }
+  }
+}

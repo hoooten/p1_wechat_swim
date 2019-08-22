@@ -21,6 +21,9 @@
       <span v-if="customIcon" slot="overwrite-left">
         <slot name="icon"></slot>
       </span>
+      <div slot="right">
+        <slot name="right-btn"></slot>
+      </div>
       <div class="text-overflow title" :style="{color: headBackground === 'transparent' ? '#fff' : '#323232'}" slot="overwrite-title">{{title}}</div>
     </x-header>
   </div>
@@ -93,8 +96,8 @@
     background-size: 12px 20px;
   }*/
   .icon-back-blue{
-    background: url("/static/images/components/icon-back-blue@2x.png") no-repeat center center;
-    background-size: 12px 20px;
+    background: url("/static/images/components/icon-back-grey.png") no-repeat center center;
+    background-size: 9px auto;
   }
   .back-txt{
     position: relative;

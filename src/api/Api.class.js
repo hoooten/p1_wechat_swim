@@ -55,9 +55,22 @@ export class ApiService{
     return downloadImage(params);
   }
 
-  /** 删除图片 */
-  deleteImage(params = {}){
-    return deleteImage(params);
+  /** 删除教点场景图片 */
+  deleteSceneImage(params = {}, isBind = false){
+    const mUrl = 'services/app/SitePhotos/Delete';
+
+    if(isBind){
+      return doDelete(mUrl, params);
+    }else{
+      return deleteImage(params);
+    }
+  }
+
+  /** 营业执照图片删除 */
+  deleteLicenseImage(params = {}){
+    const mUrl = 'services/app/TechPoints/DeleteLicensePhoto';
+
+    return doDelete(mUrl, params);
   }
 
   /** 获取教练列表数据 */
@@ -199,6 +212,90 @@ export class ApiService{
     const mUrl = 'services/app/StarHistories/GetAll';
 
     return get(mUrl, params);
+  }
+
+  /** 添加教点特色 */
+  addTeachPointFeatures(params = {}){
+    const mUrl = 'services/app/TechPointFeatures/CreateOrEdit';
+
+    return post(mUrl, params);
+  }
+
+  /** 删除教点特色 */
+  deleteFeatureWidthId(params = {}){
+    const mUrl = 'services/app/TechPointFeatures/Delete';
+
+    return doDelete(params);
+  }
+
+  /** 获取所有教点特色 */
+  getAllFeatures(params = {}){
+    const mUrl = 'services/app/TechPointFeatures/GetAll';
+
+    return get(mUrl, params);
+  }
+
+  /** 教点绑定特色项 */
+  bindFeaturesForPoint(params = {}){
+    const mUrl = 'services/app/TechPointToFeatures/CreateFeatures';
+
+    return post(mUrl, params);
+  }
+
+  /** 收藏教练 */
+  collectCoach(params = {}){
+    const mUrl = 'services/app/FavoriteTechs/CreateOrEdit';
+
+    return post(mUrl, params);
+  }
+
+  /** 取消收藏教练 */
+  cancelCollectCoach(params){
+    const mUrl = 'services/app/FavoriteTechs/Delete';
+
+    return doDelete(mUrl, params);
+  }
+
+  /** 新增收费模式 */
+  addTicketMode(params = {}){
+    const mUrl = 'services/app/TicketModes/CreateTicketMode';
+
+    return post(mUrl, params);
+  }
+
+  /** 删除收费模式 */
+  deleteTicketMode(params = {}){
+    const mUrl = 'services/app/TicketModes/Delete';
+
+    return doDelete(mUrl, params);
+  }
+
+  /** 收藏教点 */
+  collectTeachPoint(params = {}){
+    const mUrl = 'services/app/FavoriteTechPoints/CreateOrEdit';
+
+    return post(mUrl, params);
+  }
+
+  /** 取消收藏教点 */
+  cancelCollectPoint(params = {}){
+    const mUrl = 'services/app/FavoriteTechPoints/Delete';
+
+    return doDelete(mUrl, params);
+  }
+
+  /** 提交教点评分 */
+  commitPointComment(params = {}){
+    const mUrl = 'services/app/TechpointScores/CreateOrEdit';
+
+    return post(mUrl, params);
+  }
+
+  /** 提交教练评分 */
+  commitCoachComment(params = {}){
+    const mUrl = 'services/app/TechScores/CreateOrEdit';
+
+    return post(mUrl, params);
   }
 }
 

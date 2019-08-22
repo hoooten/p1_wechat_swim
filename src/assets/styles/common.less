@@ -5,8 +5,7 @@ body, html{
   overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  background: #F5F5F5;
-  font-size: 14px;
+  background: #F4F5F9;
 }
 input, textarea{
   padding-top: 2px;
@@ -23,12 +22,16 @@ button{
 ul, li{
   list-style: none;
 }
+i{
+  font-style: normal;
+}
 
 #app {
   height: 100%;
   padding-top: 44px;
   padding-bottom: 60px;
   color: #323232;
+  font-size: 14px;
   font-family: "PingFang SC","Hiragino Sans GB","STHeiti","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -104,8 +107,20 @@ ul, li{
   height: 50px;
 }
 
+/** 覆盖vux样式 */
 .weui-tabbar{
   position: fixed !important;
   bottom: 0 !important;
   background-color: #fff !important;
+}
+.weui-tabbar__icon{
+  width: 16px !important;
+  height: 16px !important;
+}
+.weui-tabbar__icon img{
+  width: auto !important;
+  height: 16px !important;
+}
+.weui-btn{
+  box-shadow: 1px 0 4px 1px rgba(153, 153, 153, 0.5);
 }

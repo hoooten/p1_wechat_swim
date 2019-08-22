@@ -1,12 +1,12 @@
 import CoachQualify from '@/pages/coach-qualify/coach-qualify';
 import CoachDetail from '@/pages/coach-detail/coach-detail'
 import TeachingNearby from '@/pages/teaching-nearby/teaching-nearby';
-import ProductIntroduce from '@/pages/product/product-introduce';
+// import ProductIntroduce from '@/pages/product/product-introduce';
 import JoinIn from '@/pages/join-menu/join-menu';
 import CoachJoin from '@/pages/coach-join/coach-join';
 import TeachingPointJoin from '@/pages/teaching-point-join/teaching-point-join';
 import TeachingPointDetail from '@/pages/teaching-point-detail/teaching-point-detail';
-import JoinHistory from '@/pages/join-history/join-history';
+// import JoinHistory from '@/pages/join-history/join-history';
 import UserCenter from '@/pages/user-center/user-center';
 import PostingHistory from '@/pages/user-center/posting-history';
 
@@ -39,8 +39,9 @@ const RouteWithCoach = [{
   name: 'CoachDetail',
   component: CoachDetail,
   meta: {
-    title: '教练资质详情',
-    back: true,
+    customer: true,   // 自定义head bar
+    // title: '教练资质详情',
+    // back: true,
   },
 }, {
   path: '/join',
@@ -88,7 +89,8 @@ const RouteWithCoach = [{
   component: UserCenter,
   meta: {
     tabName: 'com_center',
-    title: '个人中心',
+    // title: '个人中心',
+    customer: true,
   },
 }, {
   path: '/user/posting-history/:id',

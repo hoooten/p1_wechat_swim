@@ -1,6 +1,7 @@
 <template>
-  <div id="app">
+  <div id="app" :style="{paddingTop: tabName !== 'com_center' ? '44px' : 0}">
     <head-bar
+      v-if="!customerTitle"
       :title="title"
       :back-type="urlName || backFlag ? 'blue' : 'white'"
       @on-back="onBack"></head-bar>
@@ -12,12 +13,12 @@
         <tabbar-item :selected="tabName === 'teach_point_nearby'" link="/">
           <img slot="icon" v-if="tabName === 'teach_point_nearby'" src="/static/images/bottom-tab/icon-location-blue.png">
           <img slot="icon" v-else src="/static/images/bottom-tab/icon-location-grey.png">
-          <span slot="label">附近教点</span>
+          <span slot="label">教点</span>
         </tabbar-item>
         <tabbar-item :selected="tabName === 'coach_qualify'" link="/coach/qualify">
           <img slot="icon" v-if="tabName === 'coach_qualify'" src="/static/images/bottom-tab/icon-qualify-blue.png">
           <img slot="icon" v-else src="/static/images/bottom-tab/icon-qualify-grey.png">
-          <span slot="label">教练资质</span>
+          <span slot="label">教练</span>
         </tabbar-item>
 
         <tabbar-item :selected="tabName === 'null'" link="/community/index">
@@ -73,6 +74,7 @@
     },
     data(){
       return {
+        customerTitle: false,   // 自定义头部
         showTab: true,    // 是否显示tab
         tabName: '',      // tab的标识符
         title: '',        // 导航栏标题
@@ -89,6 +91,7 @@
           this.module = to.meta.module;
           this.backFlag = to.meta.back;
           this.urlName = '';
+          this.customerTitle = to.meta.customer;
 
           if(to.meta.urlName){
             this.urlName = to.meta.urlName;
@@ -103,6 +106,7 @@
         this.title = this.$route.query.title || this.$route.meta.title;
         this.module = this.$route.meta.module;
         this.backFlag = this.$route.meta.back;
+        this.customerTitle = this.$route.meta.customer;
 
         if(this.$route.meta.urlName){
           this.urlName = this.$route.meta.urlName;
@@ -111,13 +115,13 @@
     },
     mounted(){
       // 开发环境登陆方式
-      // this.$api.loginDemo({userNameOrEmailAddress: 'admin', password: '123qwe'})
-      //   .then(resp => {
-      //     if(resp.success){
-      //       window.localStorage.setItem('token', resp.result.accessToken);
-      //       window.localStorage.setItem('user_id', resp.result.userId);
-      //     }
-      //   });
+      this.$api.loginDemo({userNameOrEmailAddress: 'admin', password: '123qwe'})
+        .then(resp => {
+          if(resp.success){
+            window.localStorage.setItem('token', resp.result.accessToken);
+            window.localStorage.setItem('user_id', resp.result.userId);
+          }
+        });
     },
     methods: {
       onBack(){
@@ -133,4 +137,9 @@
 
 <style lang="less">
   @import './assets/styles/common.less';
+
+  /deep/ .weui-tabbar__icon{
+    width: 16px;
+    height: 16px;
+  }
 </style>

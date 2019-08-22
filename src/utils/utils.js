@@ -62,14 +62,14 @@ export const Utils = {
     let originHeight = img.height;
 
     // 最大尺寸限制，可通过设置宽高来实现图片压缩程度
-    const maxWidth = 300,
-        maxHeight = 300;
+    const maxWidth = 500,
+          maxHeight = 500;
 
     // 目标尺寸
     let targetWidth = originWidth,
         targetHeight = originHeight;
 
-    // 图片尺寸超过300 x 300的限制
+    // 图片尺寸超过500 x 500的限制
     if(originWidth > maxWidth || originHeight > maxHeight) {
       if(originWidth / originHeight > maxWidth / maxHeight) {
         // 更宽，按照宽度限定尺寸

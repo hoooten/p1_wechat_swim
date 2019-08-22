@@ -1,68 +1,198 @@
 <template>
   <div>
-    <group title="必填项" label-width="5.2em" label-margin-right="1em" label-align="left">
-      <x-input title="场所名称：" v-model="point.name" placeholder="必填" :show-clear="false"></x-input>
-      <cell primary="content" title="场所位置：" value-align="left" align-items="flex-start">
-        <div class="cell-con">
-          <div class="mg-b-10">
-            <div class="mg-b-5">浮潜：</div>
-            <div>
-              <m-checkbox :options="floatLocation" v-model="point.floatLocation"></m-checkbox>
-            </div>
+    <div class="group-wrp" style="margin-top: 10px;">
+      <group label-width="5.2em" label-margin-right="1em" label-align="left">
+        <cell title="商家相册">
+          <div class="img-list img-box">
+            <ul class="img-row">
+              <li v-for="(uri, imgIdx) of image.realSceneImageUris" :key="imgIdx">
+                <div class="pt-box">
+                  <img class="img-position-center" :src="uri">
+                </div>
+                <i v-if="uri" class="del" @click="onDelImage('scene', imgIdx)"></i>
+                <div class="progress" v-if="!uri">
+                  <spinner type="bubbles" size="40px"></spinner>
+                </div>
+              </li>
+              <li class="upd-btn">
+                <input type="file" class="file-ipt" accept="image/*" multiple="multiple" @change="onUploadImg($event, 'scene')"/>
+              </li>
+            </ul>
           </div>
-          <div class="mg-b-10">
-            <div class="mg-b-5">游泳：</div>
-            <div class="mg-b-5">
-              <m-checkbox :options="swimLocation" v-model="point.swimLocation"></m-checkbox>
-            </div>
-            <m-radio :options="constantTemperature" v-model="point.isConstantTemp"></m-radio>
-          </div>
-        </div>
-      </cell>
-      <cell primary="content" title="规模：" value-align="left" align-items="flex-start">
-        <div class="cell-con">
-          <div class="padding-tb-10 vux-1px-b" style="padding-top: 0;">
-            <input class="half-w" type="number" v-model="point.scale" placeholder="请输入员工数量"/>员工数量
-          </div>
-          <div class="padding-tb-10 vux-1px-b">
-            <input class="half-w" type="number" v-model="point.lifeguardQty" placeholder="请输入救生员数量"/>救生员数量
-          </div>
-          <div class="padding-tb-10">
-            <input class="half-w" type="number" v-model="point.area" placeholder="请输入泳池面积"/>面积(㎡)
-          </div>
-        </div>
-      </cell>
-      <cell primary="content" title="换水周期：" value-align="left" align-items="flex-start">
-        <div class="cell-con">
-          <input class="half-w" type="number" v-model="point.waterChangePeroid" placeholder="请输换水周期"/>天/次
-        </div>
-      </cell>
-      <popup-radio title="消毒方式：" :options="disinfectionMethod" v-model="point.disinfectionMethod" :columns="1" placeholder="请选择消毒方式" value-align="left"></popup-radio>
-      <!--<x-address title="地址" :list="addressList" @on-shadow-change="onGetAddress" v-model="point.address" placeholder="请选择地址" value-text-align="left"></x-address>-->
-      <!--<x-textarea title="详细地址" :height="50" v-model="point.addressDetail" placeholder="请输入详细地址"></x-textarea>-->
+        </cell>
+        <x-input title="教点名称" v-model="point.name" text-align="right" placeholder="请输入" :show-clear="false"></x-input>
+        <cell primary="content" title="地址：" align-items="flex-start" value-align="right" is-link>
+          <div @click="isShowMap = true">{{point.address ? point.address : '请选择地址'}}</div>
+        </cell>
+        <x-input title="电话" v-model="point.tel" text-align="right" placeholder="请输入" :show-clear="false"></x-input>
+      </group>
+    </div>
 
-      <cell primary="content" title="地址：" align-items="flex-start" value-align="left" is-link>
-        <div @click="isShowMap = true">{{point.address ? point.address : '请选择地址'}}</div>
-      </cell>
-      <cell primary="content" title="场所实景：" align-items="flex-start">
+    <div class="oper-flex">
+      <div class="left-sp">收费模式</div>
+      <div class="right-sp">
+        <span @click="isShowTicketModal = true">添加</span>
+      </div>
+    </div>
+    <div class="group-wrp">
+      <group>
+        <template v-for="(ticket, tIdx) of ticketModes">
+          <cell
+            :title="ticket.name"
+            text-align="right"
+            :key="tIdx">
+            <div class="del-btn-flex">
+              <span @click="onDeleteTicketMode(ticket.id, tIdx)"></span>
+            </div>
+          </cell>
+        </template>
+        <!--<cell title="月票" text-align="right">-->
+          <!--<div class="del-btn-flex">-->
+            <!--<span></span>-->
+          <!--</div>-->
+        <!--</cell>-->
+      </group>
+    </div>
+
+    <div class="oper-flex">
+      <div class="left-sp">商家规模</div>
+    </div>
+    <div class="group-wrp">
+      <group>
+        <x-input title="员工人数" v-model="point.scale" text-align="right" placeholder="请输入" :show-clear="false"></x-input>
+        <x-input title="救生员数量" v-model="point.lifeguardQty" text-align="right" placeholder="请输入" :show-clear="false"></x-input>
+        <x-input title="面积平方米" v-model="point.area" text-align="right" placeholder="请输入" :show-clear="false"></x-input>
+      </group>
+    </div>
+
+    <div class="oper-flex">
+      <div class="left-sp">配套设施</div>
+    </div>
+    <div class="group-wrp">
+      <group label-width="130px">
+        <x-input title="换水周期(天/次)" v-model="point.waterChangePeroid" text-align="right" placeholder="请输入" :show-clear="false"></x-input>
+        <popup-radio title="消毒方式" :options="disinfectionMethod" v-model="point.disinfectionMethod" :columns="1" placeholder="请选择">
+          <p slot="popup-header" class="vux-1px-b pop-radio-title">请选择消毒方式</p>
+        </popup-radio>
+        <cell primary="content" title="冲凉房" value-align="right" align-items="flex-start">
+          <m-radio :options="isShowerRoom" v-model="point.isShowerRoom"></m-radio>
+        </cell>
+        <cell primary="content" title="储物柜" value-align="right" align-items="flex-start">
+          <m-radio :options="isStorageCabinet" v-model="point.isStorageCabinet"></m-radio>
+        </cell>
+      </group>
+    </div>
+
+    <div class="casul-box">
+      <div class="csl-title" style="padding-top: 12px;">营业执照</div>
+      <div class="csl-inner">
         <div class="img-box">
           <ul class="img-row">
-            <li v-for="(uri, imgIdx) of image.realSceneImageUris" :key="imgIdx">
+            <li v-for="(uri, imgIdx) of image.licenseImageUris" :key="imgIdx">
               <div class="pt-box">
                 <img class="img-position-center" :src="uri">
               </div>
-              <i v-if="uri" class="del" @click="onDelImage('scene', imgIdx)"></i>
+              <i v-if="uri" class="del" @click="onDelImage('licence', imgIdx)"></i>
               <div class="progress" v-if="!uri">
                 <spinner type="bubbles" size="40px"></spinner>
               </div>
             </li>
-            <li class="upd-btn">
-              <input type="file" class="file-ipt" accept="image/*" multiple="multiple" @change="onUploadImg($event, 'scene')"/>
+            <li class="upd-btn" v-if="image.licenseImageUris.length < 1">
+              <input type="file" class="file-ipt" accept="image/*" @change="onUploadImg($event, 'licence')"/>
             </li>
           </ul>
         </div>
-      </cell>
-    </group>
+      </div>
+    </div>
+
+    <div class="group-wrp txt-area ">
+      <div class="txt-title">教点简介</div>
+      <x-textarea :height="80" v-model="point.description" placeholder=""></x-textarea>
+    </div>
+
+    <div class="casul-box">
+      <div class="oper-flex">
+        <div class="left-sp" style="color: #323232">教点特色</div>
+        <div class="right-sp">
+          <span @click="isShowFeatureModal = true">添加</span>
+        </div>
+      </div>
+      <div class="csl-inner">
+        <div
+          class="feature-it"
+          v-for="(feature, idx) of features"
+          :key="idx"
+          :class="{on: selectedFeatures.indexOf(feature.techPointFeature.id) > -1}">
+          <span @click="onSelectFeature(feature.techPointFeature.id)">{{feature.techPointFeature.name}}</span>
+          <i v-show="selectedFeatures.indexOf(feature.techPointFeature.id) < 0" @click="onDelFeature(feature.techPointFeature.id)"></i>
+        </div>
+      </div>
+    </div>
+
+    <!--<div class="group-wrp">
+      <group>
+        <cell primary="content" title="场所位置：" value-align="left" align-items="flex-start">
+          <div class="cell-con">
+            <div class="mg-b-10">
+              <div class="mg-b-5">浮潜：</div>
+              <div>
+                <m-checkbox :options="floatLocation" v-model="point.floatLocation"></m-checkbox>
+              </div>
+            </div>
+            <div class="mg-b-10">
+              <div class="mg-b-5">游泳：</div>
+              <div class="mg-b-5">
+                <m-checkbox :options="swimLocation" v-model="point.swimLocation"></m-checkbox>
+              </div>
+              <m-radio :options="constantTemperature" v-model="point.isConstantTemp"></m-radio>
+            </div>
+          </div>
+        </cell>
+        <cell primary="content" title="规模：" value-align="left" align-items="flex-start">
+          <div class="cell-con">
+            <div class="padding-tb-10 vux-1px-b" style="padding-top: 0;">
+              <input class="half-w" type="number" v-model="point.scale" placeholder="请输入员工数量"/>员工数量
+            </div>
+            <div class="padding-tb-10 vux-1px-b">
+              <input class="half-w" type="number" v-model="point.lifeguardQty" placeholder="请输入救生员数量"/>救生员数量
+            </div>
+            <div class="padding-tb-10">
+              <input class="half-w" type="number" v-model="point.area" placeholder="请输入泳池面积"/>面积(㎡)
+            </div>
+          </div>
+        </cell>
+        <cell primary="content" title="换水周期：" value-align="left" align-items="flex-start">
+          <div class="cell-con">
+            <input class="half-w" type="number" v-model="point.waterChangePeroid" placeholder="请输换水周期"/>天/次
+          </div>
+        </cell>
+        <popup-radio title="消毒方式：" :options="disinfectionMethod" v-model="point.disinfectionMethod" :columns="1" placeholder="请选择消毒方式" value-align="left"></popup-radio>
+        &lt;!&ndash;<x-address title="地址" :list="addressList" @on-shadow-change="onGetAddress" v-model="point.address" placeholder="请选择地址" value-text-align="left"></x-address>&ndash;&gt;
+        &lt;!&ndash;<x-textarea title="详细地址" :height="50" v-model="point.addressDetail" placeholder="请输入详细地址"></x-textarea>&ndash;&gt;
+
+        &lt;!&ndash;<cell primary="content" title="地址：" align-items="flex-start" value-align="left" is-link>&ndash;&gt;
+          &lt;!&ndash;<div @click="isShowMap = true">{{point.address ? point.address : '请选择地址'}}</div>&ndash;&gt;
+        &lt;!&ndash;</cell>&ndash;&gt;
+        <cell primary="content" title="场所实景：" align-items="flex-start">
+          <div class="img-box">
+            <ul class="img-row">
+              <li v-for="(uri, imgIdx) of image.realSceneImageUris" :key="imgIdx">
+                <div class="pt-box">
+                  <img class="img-position-center" :src="uri">
+                </div>
+                <i v-if="uri" class="del" @click="onDelImage('scene', imgIdx)"></i>
+                <div class="progress" v-if="!uri">
+                  <spinner type="bubbles" size="40px"></spinner>
+                </div>
+              </li>
+              <li class="upd-btn">
+                <input type="file" class="file-ipt" accept="image/*" multiple="multiple" @change="onUploadImg($event, 'scene')"/>
+              </li>
+            </ul>
+          </div>
+        </cell>
+      </group>
+    </div>
 
     <group title="选填项" label-width="5.2em" label-margin-right="1em" label-align="left">
       <cell primary="content" title="营业执照：" align-items="flex-start">
@@ -105,18 +235,38 @@
         </div>
       </cell>
       <x-textarea title="场所简介" :height="50" v-model="point.description" placeholder="选填"></x-textarea>
-    </group>
+    </group>-->
 
     <div class="padding-15">
-      <x-button :gradients="['#1D62F0', '#19D5FD']" @click.native="onPointJoin">{{point.id ? '提交修改' : '加盟'}}</x-button>
+      <x-button :gradients="['#597AEE', '#596BEE']" @click.native="onPointJoin">保存</x-button>
     </div>
 
-    <gaode-map :show="isShowMap" @on-get-address="onGetAddressFromMap"></gaode-map>
+    <!-- 添加特色项 -->
+    <div class="feature-wrp" v-transfer-dom>
+      <confirm
+        v-model="isShowFeatureModal"
+        title="添加特色"
+        @on-confirm="onConfirmAddFeature">
+        <x-input class="featureInput" v-model="feature" placeholder="请输入特色名称" :show-clear="false"></x-input>
+      </confirm>
+    </div>
+
+    <!-- 添加收费模式 -->
+    <div class="feature-wrp" v-transfer-dom>
+      <confirm
+        v-model="isShowTicketModal"
+        title="添加收费模式"
+        @on-confirm="onAddTicketMode">
+        <x-input class="featureInput" v-model="ticketModeName" placeholder="请输入特色名称" :show-clear="false"></x-input>
+      </confirm>
+    </div>
+
+    <gaode-map :show="isShowMap" @on-get-address="onAddTicketMode"></gaode-map>
   </div>
 </template>
 
 <script>
-  import {Group, XInput, Cell, PopupRadio, Datetime, XAddress, XTextarea, ChinaAddressV4Data, XButton, Spinner} from 'vux';
+  import {TransferDomDirective as TransferDom, Confirm, Group, XInput, Cell, PopupRadio, Datetime, XAddress, XTextarea, ChinaAddressV4Data, XButton, Spinner} from 'vux';
   import {MRadio, MCheckbox} from '@/components';
   import {Utils} from '@/utils/utils';
   import {WxUtil} from '@/utils/wx-util';
@@ -124,7 +274,11 @@
 
   export default {
     name: 'teaching-point-join',
+    directives: {
+      TransferDom,
+    },
     components: {
+      Confirm,
       XTextarea,
       Group,
       XInput,
@@ -140,8 +294,10 @@
     },
     data(){
       return {
+        isShowFeatureModal: false,
+        isShowTicketModal: false,
         isShowMap: false,
-        floatLocation: [
+        /*floatLocation: [
           {
             value: 0,
             name: '江',
@@ -168,8 +324,13 @@
         constantTemperature: [{
           value: 1,
           name: '是否恒温',
-        }],
-        disinfectionMethod: [
+        }],*/
+        feature: '',          // 新建特色名称
+        features: [],         // 特色列表
+        selectedFeatures: [], // 已选择的特色ID
+        ticketModeName: '',       // 新建收费模式名称
+        ticketModes: [],      // 已有收费模式
+        disinfectionMethod: [ // 消毒方式级别
           {
             value: '一级',
             key: 1,
@@ -181,16 +342,16 @@
             key: 3,
           }
         ],
-        isShowerRoom: [{value: 1, name: '是'}],
-        isStorageCabinet: [{value: 1, name: '是'}],
+        isShowerRoom: [{value: 1, name: '是'}, {value: 0, name: '否'}],
+        isStorageCabinet: [{value: 1, name: '是'}, {value: 0, name: '否'}],
         addressList: ChinaAddressV4Data,
         addressNames: '',
         point: {
           id: '',
           name: '',
-          floatLocation: [],
-          swimLocation: [],
-          isConstantTemp: '',
+          // floatLocation: [],
+          // swimLocation: [],
+          // isConstantTemp: '',
           scale: '',
           lifeguardQty: '',
           area: '',
@@ -206,7 +367,10 @@
           description: '',
           licenseId: '',
           lat: 23.28693,
-          lon: 113.9139
+          lon: 113.9139,
+          tel: '',
+          ticket: 0,
+          // ticketType: 0,
         },
         image: {
           realSceneImageTokens: [],
@@ -229,6 +393,7 @@
       if(this.point.id){
         this.getPointData();
       }
+      this.getAllFeatures();
     },
     methods: {
       /** 获取教点数据 */
@@ -243,30 +408,120 @@
           });
       },
 
+      /** 添加教点特色 */
+      onConfirmAddFeature(){
+        if(this.feature){
+          this.$vux.loading.show('正在提交...');
+          this.$api.addTeachPointFeatures({name: this.feature})
+            .then(resp => {
+              if(resp.success){
+                this.$vux.toast.show('添加成功！');
+                this.getAllFeatures();
+              }
+              this.$vux.loading.hide();
+            });
+        }else{
+          this.$vux.toast.show('特色名称不能为空');
+        }
+      },
+
+      /** 获取教点特色 */
+      getAllFeatures(){
+        this.$api.getAllFeatures()
+          .then(resp => {
+            if(resp.success){
+              this.features = resp.result.items;
+            }
+          });
+      },
+
+      /** 删除教点特色 */
+      onDelFeature(id){
+        this.$vux.loading.show('正在删除...');
+        this.$api.deleteFeatureWidthId({id: id})
+          .then(resp => {
+            if(resp.success){
+              this.$vux.toast.show('删除成功!');
+            }
+            this.$vux.loading.hide();
+          });
+      },
+
+      /** 选择教点特色 */
+      onSelectFeature(id){
+        const index = this.selectedFeatures.indexOf(id);
+
+        if(index > -1){
+          this.selectedFeatures.splice(index, 1);
+        }else{
+          this.selectedFeatures.push(id);
+        }
+      },
+
+      /** 新增收费模式 */
+      onAddTicketMode(){
+        const hash = {
+          techPointId: this.point.id,
+          name: this.ticketModeName,
+        };
+
+        this.$vux.loading.show('正在提交...');
+        this.$api.addTicketMode(hash)
+          .then(resp => {
+            if(resp.success){
+              this.$vux.toast.show('添加成功！');
+              this.ticketModes.push(resp.result);
+            }
+            this.$vux.loading.hide();
+          });
+      },
+
+      /** 删除收费模式 */
+      onDeleteTicketMode(id){
+        this.$vux.loading.show();
+        this.$api.deleteTicketMode({id: id})
+          .then(resp => {
+            if(resp.success){
+              this.$vux.toast.show('删除成功！');
+              this.ticketModes.forEach((mode, idx) => {
+                if(mode.id === id){
+                  this.ticketModes.splice(idx, 1);
+                }
+              });
+            }
+            this.$vux.loading.hide();
+          });
+      },
+
+      /** 绑定教点特色 */
+      bindFeaturesForPoint(){
+        this.$api.bindFeaturesForPoint({techPointId: this.point.id, featureIds: this.selectedFeatures});
+      },
+
       /** 处理编辑教点数据 */
       resolvePointData(sourceData){
         const source = sourceData.getTechPointForEditDto.techPoint;
         const photosToken = sourceData.photos;
         const targetHash = {
-          floatLocation: [],
-          swimLocation: [],
+          // floatLocation: [],
+          // swimLocation: [],
         };
 
         targetHash['name'] = source.name;
-        source.floatLocation.split('').forEach((it, idx) => {
-          if(+it === 1){
-            targetHash['floatLocation'].push(this.floatLocation[idx].value + '');
-          }
-        });
-        source.swimLocation.split('').forEach((it2, idx2) => {
-          if(+it2 === 1){
-            if(idx2 < 2){
-              targetHash['swimLocation'].push(this.swimLocation[idx2].value + '');
-            }else{
-              targetHash['isConstantTemp'] = it2;
-            }
-          }
-        });
+        // source.floatLocation.split('').forEach((it, idx) => {
+        //   if(+it === 1){
+        //     targetHash['floatLocation'].push(this.floatLocation[idx].value + '');
+        //   }
+        // });
+        // source.swimLocation.split('').forEach((it2, idx2) => {
+        //   if(+it2 === 1){
+        //     if(idx2 < 2){
+        //       targetHash['swimLocation'].push(this.swimLocation[idx2].value + '');
+        //     }else{
+        //       targetHash['isConstantTemp'] = it2;
+        //     }
+        //   }
+        // });
         targetHash['scale'] = source.scale;
         targetHash['lifeguardQty'] = source.lifeguardQty;
         targetHash['area'] = source.area;
@@ -282,22 +537,26 @@
         targetHash['deepArea'] = source.deepArea;
         targetHash['description'] = source.description;
         targetHash['licenseId'] = source.licenseId;
+        targetHash['tel'] = source.tel;
 
         // 下载营业执照图片
-        this.image.licenseImageTokens.push(targetHash['licenseId']);
-        this.$api.downloadImage({id: targetHash['licenseId']})
-          .then(resp => {
-            if(resp.success){
-              const uriPrefix = `data:image/png;base64,${resp.result}`;
+        if(targetHash['licenseId']){
+          this.image.licenseImageTokens.push(targetHash['licenseId']);
+          this.$api.downloadImage({id: targetHash['licenseId']})
+            .then(resp => {
+              if(resp.success){
+                const uriPrefix = `data:image/png;base64,${resp.result}`;
 
-              this.$set(this.image.licenseImageUris, 0, uriPrefix);
-            }
-          });
+                this.$set(this.image.licenseImageUris, 0, uriPrefix);
+              }
+            });
+        }
 
         // 下载教点实景图片
+        this.image.realSceneImageTokens = photosToken;
         photosToken.forEach((photo, idx) => {
           // 教点实景图片ID
-          this.image.realSceneImageTokens.push(photo.sitePhototId);
+          // this.image.realSceneImageTokens.push(photo.sitePhototId);
           this.$api.downloadImage({id: photo.sitePhototId})
             .then(resp => {
               if(resp.success){
@@ -308,7 +567,15 @@
             });
         });
 
+        // targetHash['ticketModes'] = sourceData.ticketModes;
         this.point = Object.assign({}, this.point, targetHash);
+
+        // 保存已选择的特色的ID
+        sourceData.features.forEach((f, i) => {
+          this.selectedFeatures.push(f.id);
+        });
+        // 收费模式
+        this.ticketModes = sourceData.ticketModes;
       },
 
       /** 教点加盟 */
@@ -316,12 +583,16 @@
         if(this.validForm()){
           const params = this.mixParams();
 
+          this.$vux.loading.show('正在提交...');
           this.$api.teachingPointJoin(params)
             .then(resp => {
+              this.$vux.loading.hide();
               if(resp.success){
                 if(resp.result != 0){
+                  this.bindFeaturesForPoint();
                   // 绑定实景图片
-                  this.$api.connectedSitePhotos({techPointId: resp.result, photoIds: this.image.realSceneImageTokens})
+                  const tokens = this.image.realSceneImageTokens.map(item => item.sitePhototId);
+                  this.$api.connectedSitePhotos({techPointId: resp.result, photoIds: tokens})
                     .then(resp => {
                       if(resp.success){
                         const _this = this;
@@ -330,7 +601,8 @@
                           type: 'success',
                           text: this.point.id ? '修改成功！' : '加盟成功！',
                           onHide(){
-                            _this.$router.push({name: 'Index'});
+                            // _this.$router.push({name: 'Index'});
+                            window.location.reload();
                           }
                         });
                       }
@@ -348,23 +620,23 @@
 
       /** 字段处理 */
       mixParams(){
-        let floatTemp = [0, 0, 0, 0];
-        let swimTemp = [0, 0, 0];
+        // let floatTemp = [0, 0, 0, 0];
+        // let swimTemp = [0, 0, 0];
         const query = Object.assign({}, this.point);
 
-        this.point['floatLocation'].forEach((it1, idx1) => {
-          floatTemp[it1] = 1;
-        });
+        // this.point['floatLocation'].forEach((it1, idx1) => {
+        //   floatTemp[it1] = 1;
+        // });
 
-        this.point['swimLocation'].forEach((it2, idx2) => {
-          swimTemp[it2] = 1;
-        });
+        // this.point['swimLocation'].forEach((it2, idx2) => {
+        //   swimTemp[it2] = 1;
+        // });
 
-        if(this.point['isConstantTemp']){
-          swimTemp[2] = 1;
-        }
-        query['floatLocation'] = floatTemp.join('');
-        query['swimLocation'] = swimTemp.join('');
+        // if(this.point['isConstantTemp']){
+        //   swimTemp[2] = 1;
+        // }
+        // query['floatLocation'] = floatTemp.join('');
+        // query['swimLocation'] = swimTemp.join('');
         // query['address'] = this.addressNames.join(' ') + '$' + query.addressDetail;
         query['isShowerRoom'] = Number(this.point['isShowerRoom']) === 1 ? true : false;
         query['isStorageCabinet'] = Number(this.point['isStorageCabinet']) === 1 ? true : false;
@@ -401,12 +673,12 @@
                 unError = false;
               }
               break;
-            case 'swimLocation':
-              if(data['floatLocation'].length <= 0 && data['swimLocation'].length <= 0){
-                errMsg = '浮潜和游泳至少选择一项';
-                unError = false;
-              }
-              break;
+            // case 'swimLocation':
+            //   if(data['floatLocation'].length <= 0 && data['swimLocation'].length <= 0){
+            //     errMsg = '浮潜和游泳至少选择一项';
+            //     unError = false;
+            //   }
+            //   break;
             case 'scale':
               if(!data[k]){
                 errMsg = '请输入员工数';
@@ -447,12 +719,12 @@
                 unError = false;
               }
               break;
-            case 'addressDetail':
-              if(!data[k]){
-                errMsg = '请输入详细地址';
-                unError = false;
-              }
-              break;
+            // case 'addressDetail':
+            //   if(!data[k]){
+            //     errMsg = '请输入详细地址';
+            //     unError = false;
+            //   }
+            //   break;
             default: break;
           }
           if(!unError) break;
@@ -507,8 +779,11 @@
               const originLen = this.image.realSceneImageTokens.length;
 
               resp.result.forEach((itm, idx) => {
-                this.image.realSceneImageTokens.push(itm.fileToken);
+                const hash = {
+                  sitePhototId: itm.fileToken,
+                };
 
+                this.image.realSceneImageTokens.push(hash);
                 this.$api.downloadImage({id: itm.fileToken})
                   .then(resp => {
                     if(resp.success){
@@ -549,30 +824,235 @@
 
       /** 删除图片 */
       onDelImage(imgType, imgIdx){
-        const id = imgType === 'scene' ? this.image.realSceneImageTokens[imgIdx] : this.image.licenseImageTokens[imgIdx];
+        let id = '';
+        let isBind2Point = false;
 
-        this.$vux.loading.show();
-        this.$api.deleteImage({id: id})
-          .then(resp => {
-            if(resp.success){
-              this.$vux.toast.show('图片删除成功');
+        if(imgType === 'scene'){
+          if(this.image.realSceneImageTokens[imgIdx].id){
+            id = this.image.realSceneImageTokens[imgIdx].id;
+            isBind2Point = true;
+          }else{
+            id = this.image.realSceneImageTokens[imgIdx].sitePhototId;
+          }
 
-              if(imgType === 'scene'){
+          this.$vux.loading.show();
+          this.$api.deleteSceneImage({id: id}, isBind2Point)
+            .then(resp => {
+              if(resp.success){
+                this.$vux.toast.show('图片删除成功');
+
                 this.image.realSceneImageTokens.splice(imgIdx, 1);
                 this.image.realSceneImageUris.splice(imgIdx, 1);
-              }else{
+                // if(imgType === 'scene'){
+                //   this.image.realSceneImageTokens.splice(imgIdx, 1);
+                //   this.image.realSceneImageUris.splice(imgIdx, 1);
+                // }else{
+                //   this.image.licenseImageTokens.splice(imgIdx, 1);
+                //   this.image.licenseImageUris.splice(imgIdx, 1);
+                // }
+              }
+              this.$vux.loading.hide();
+            });
+        }else{
+          id = this.image.licenseImageTokens[imgIdx];
+
+          this.$vux.loading.show();
+          this.$api.deleteLicenseImage({photoId: id})
+            .then(resp => {
+              if(resp.success){
+                this.$vux.toast.show('图片删除成功');
                 this.image.licenseImageTokens.splice(imgIdx, 1);
                 this.image.licenseImageUris.splice(imgIdx, 1);
               }
-            }
-            this.$vux.loading.hide();
-          });
+              this.$vux.loading.hide();
+            });
+        }
       },
     },
   }
 </script>
 
 <style lang="less" scoped>
+  .group-wrp{
+    padding-right: 10px;
+    background: #fff;
+  }
+  .oper-flex{
+    margin-top: 10px;
+    display: flex;
+    padding: 10px;
+
+    & > div{
+      flex: 1;
+    }
+    .left-sp{
+      color: #999;
+    }
+    .right-sp{
+      text-align: right;
+
+      span{
+        color: #597AEE;
+      }
+    }
+  }
+  .del-btn-flex{
+    span{
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      background: url("/static/images/delete-btn-grey@2x.png") no-repeat center center;
+      background-size: 15px auto;
+    }
+  }
+  .casul-box{
+    margin-top: 10px;
+    padding: 0 10px;
+    background: #fff;
+
+    .oper-flex{
+      padding-left: 0;
+      padding-right: 0;
+      margin-top: 0;
+      border-bottom: 1px solid #E5E5E5;
+    }
+    .csl-inner{
+      padding: 10px 0;
+      font-size: 0;
+
+      .feature-it{
+        position: relative;
+        display: inline-block;
+        width: 76px;
+        height: 25px;
+        padding: 0 5px;
+        line-height: 25px;
+        margin: 0 12px 20px 0;
+        font-size: 12px;
+        text-align: center;
+        border-radius: 3px;
+        background: #EEEEEE;
+        box-sizing: border-box;
+
+        &.on{
+          color: #5977EE;
+          background: #E0E4FF;
+        }
+        span{
+          display: inline-block;
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        i{
+          position: absolute;
+          width: 14px;
+          height: 14px;
+          right: -7px;
+          top: -7px;
+          background: url("/static/images/del-circle-blue.png") no-repeat center center;
+          background-size: 13px auto;
+        }
+      }
+    }
+  }
+  .img-box{
+    text-align: right;
+
+    .img-row{
+      display: flex;
+      flex-wrap: wrap;
+
+      li{
+        position: relative;
+        width: 61px;
+        height: 43px;
+        margin-right: 12px;
+        margin-bottom: 10px;
+        border: 1px solid #dedede;
+        border-radius: 5px;
+
+        .pt-box{
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+        }
+        img{
+          width: 100%;
+          height: auto;
+        }
+        .del{
+          position: absolute;
+          right: -7px;
+          top: -7px;
+          width: 14px;
+          height: 14px;
+          background: url("/static/images/del-circle-blue.png") no-repeat center center;
+          background-size: 13px auto;
+          /*z-index: 100;*/
+        }
+      }
+      .upd-btn{
+        position: relative;
+        background: url("/static/images/plus-grey-lg.png") no-repeat center center;
+        background-size: 20px auto;
+        border: 1px solid #dedede;
+        border-radius: 5px;
+      }
+      .progress{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        line-height: 43px;
+        left: 0;
+        top: 0;
+        text-align: center;
+        z-index: 5;
+      }
+    }
+  }
+  .pop-radio-title{
+    padding: 12px;
+    color: #666;
+    font-size: 15px;
+    text-align: center;
+  }
+  .featureInput{
+    color: #323232;
+    border-bottom: 1px solid #D5D5D6;
+  }
+  .txt-area{
+    margin-top: 10px;
+
+    .txt-title{
+      padding: 15px;
+      font-size: 15px;
+    }
+  }
+
+  /deep/ .weui-textarea{
+    font-size: 14px;
+  }
+  /deep/ .weui-cell{
+    padding: 15px 2px 15px 15px;
+  }
+  /deep/ .weui-cells{
+    margin-top: 0;
+  }
+  /deep/ .weui-cells:before,
+  /deep/ .weui-cells:after{
+    border-top: none;
+    border-bottom: none;
+  }
+  /deep/ .vux-cell-value,
+  /deep/ .weui-cell__ft{
+    color: #323232;
+  }
+
+
+
+/*
   .cell-con{
     color: #323232;
     font-size: 15px;
@@ -587,62 +1067,7 @@
     width: 60%;
   }
 
-  .img-box{
-    text-align: left;
-
-    .img-row{
-      display: flex;
-      flex-wrap: wrap;
-
-      li{
-        position: relative;
-        width: 90px;
-        height: 90px;
-        margin-right: 15px;
-        margin-bottom: 10px;
-        border: 1px solid #dedede;
-        border-radius: 4px;
-
-        &:nth-of-type(4n){
-          margin-right: 0;
-        }
-        .pt-box{
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-        }
-        img{
-          width: 100%;
-          height: auto;
-        }
-        .del{
-          position: absolute;
-          right: -15px;
-          top: -15px;
-          width: 30px;
-          height: 30px;
-          background: url("/static/images/common/icon-del-grey.png") no-repeat center center;
-          background-size: 30px auto;
-          z-index: 100;
-        }
-      }
-      .upd-btn{
-        position: relative;
-        background: url("/static/images/common/icon-plus-lg.png") no-repeat center center;
-        background-size: 50px auto;
-      }
-      .progress{
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        line-height: 75px;
-        left: 0;
-        top: 0;
-        text-align: center;
-        z-index: 5;
-      }
-    }
-  }
+*/
 
   .file-ipt{
     position: absolute;

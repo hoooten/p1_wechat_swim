@@ -30,7 +30,6 @@
 
         iframe.postMessage('getMap', 'https://m.amap.com/picker/');
         window.addEventListener('message', e => {
-          console.log(e.data);
           if (e.data.command != "COMMAND_GET_TITLE") {
             this.$emit('on-get-address', e.data);
           }
