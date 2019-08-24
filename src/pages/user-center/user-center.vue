@@ -39,13 +39,13 @@
 
     <div class="link-wrp" v-if="userInfo.user">
       <group>
-      <cell value-align="right" is-link :link="`/user/posting-history/${userInfo.user.id}`">
+      <!--<cell value-align="right" is-link :link="`/user/posting-history/${userInfo.user.id}`">
         <div class="cell-tt" slot="title">
           <img src="/static/images/my-posting.png">
           <span>我的发帖</span>
         </div>
         <div class="posting-count">{{userInfo.topicCount}}</div>
-      </cell>
+      </cell>-->
       <cell value-align="right" is-link>
         <div class="cell-tt" slot="title">
           <img src="/static/images/my-vip.png">

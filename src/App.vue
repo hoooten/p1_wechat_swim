@@ -21,10 +21,10 @@
           <span slot="label">教练</span>
         </tabbar-item>
 
-        <tabbar-item :selected="tabName === 'null'" link="/community/index">
+        <!--<tabbar-item :selected="tabName === 'null'" link="/community/index">
           <img slot="icon" src="/static/images/bottom-tab/icon-index-grey.png">
           <span slot="label">社区首页</span>
-        </tabbar-item>
+        </tabbar-item>-->
 
         <tabbar-item :selected="tabName === 'coach_join'" link="/join">
           <img slot="icon" v-if="tabName === 'coach_join'" src="/static/images/bottom-tab/icon-join-blue.png">
