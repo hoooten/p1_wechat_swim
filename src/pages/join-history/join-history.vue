@@ -42,7 +42,7 @@
 
               this.techPointData = item;
 
-              if(item.photos[0]){
+              if(item && item.photos[0]){
                 this.downloadPointCover(item.photos[0].sitePhototId);
               }
             }
