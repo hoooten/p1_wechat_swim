@@ -31,11 +31,11 @@
           <img slot="icon" v-else src="/static/images/bottom-tab/icon-join-grey.png">
           <span slot="label">加盟</span>
         </tabbar-item>
-        <tabbar-item :selected="tabName === 'com_center'" link="/user-center">
+        <!--<tabbar-item :selected="tabName === 'com_center'" link="/user-center">
           <img slot="icon" v-if="tabName === 'com_center'" src="/static/images/bottom-tab/icon-center-blue.png">
           <img slot="icon" v-else src="/static/images/bottom-tab/icon-center-grey.png">
           <span slot="label">个人中心</span>
-        </tabbar-item>
+        </tabbar-item>-->
       </tabbar>
 
       <tabbar v-show="module">
@@ -115,13 +115,13 @@
     },
     mounted(){
       // 开发环境登陆方式
-      this.$api.loginDemo({userNameOrEmailAddress: 'admin', password: '123qwe'})
-        .then(resp => {
-          if(resp.success){
-            window.localStorage.setItem('token', resp.result.accessToken);
-            window.localStorage.setItem('user_id', resp.result.userId);
-          }
-        });
+      // this.$api.loginDemo({userNameOrEmailAddress: 'admin', password: '123qwe'})
+      //   .then(resp => {
+      //     if(resp.success){
+      //       window.localStorage.setItem('token', resp.result.accessToken);
+      //       window.localStorage.setItem('user_id', resp.result.userId);
+      //     }
+      //   });
     },
     methods: {
       onBack(){

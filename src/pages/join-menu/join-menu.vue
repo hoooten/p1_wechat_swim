@@ -90,8 +90,8 @@
               if(item.photos[0]){
                 this.downloadPointCover(item.photos[0].sitePhototId);
               }
-              this.$vux.loading.hide();
             }
+            this.$vux.loading.hide();
           });
 
         // 获取加盟的教练信息
