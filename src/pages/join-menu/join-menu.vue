@@ -108,8 +108,8 @@
         this.$api.checkUserJoinStatus()
           .then(resp => {
             if(resp.success){
-              this.isPointJoin = resp.result.isJoinAsTech;
-              this.isCoachJoin = resp.result.isJoinInPoint;
+              this.isPointJoin = resp.result.isJoinInPoint;
+              this.isCoachJoin = resp.result.isJoinAsTech;
             }
           });
       },
