@@ -261,7 +261,7 @@
       </confirm>
     </div>
 
-    <gaode-map :show="isShowMap" @on-get-address="onAddTicketMode"></gaode-map>
+    <gaode-map :show="isShowMap" @on-get-address="onGetAddressFromMap"></gaode-map>
   </div>
 </template>
 
