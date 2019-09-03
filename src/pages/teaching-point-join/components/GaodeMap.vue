@@ -5,7 +5,7 @@
         id="getAddress"
         class="map-item"
         @load="loadiframe"
-        src="https://m.amap.com/picker/?key=608d75903d29ad471362f8c58c550daf"></iframe>
+        v-bind:src="reportUrl"></iframe>
     </div>
   </div>
 </template>
@@ -23,6 +23,12 @@
       return {
         locationData: {}
       }
+    },
+    created(){
+        let lat = window.localStorage.getItem('lat') || '';
+        let lon = window.localStorage.getItem('lon') || '';
+
+        this.reportUrl =  'https://m.amap.com/picker/?key=608d75903d29ad471362f8c58c550daf&center='+lon+','+lat;
     },
     methods: {
       loadiframe() {
