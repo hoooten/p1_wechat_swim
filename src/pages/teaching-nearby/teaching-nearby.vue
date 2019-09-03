@@ -139,6 +139,7 @@
                 }
               });
 
+              this.pointAvatars = new Array(this.photos.length);
               this.downloadPointAvatar();
               if(this.q.SkipCount === 0){
                 this.initGaodeMap();
@@ -181,7 +182,8 @@
                 if(resp.result){
                   const base64 = `data:image/png;base64,${resp.result}`;
 
-                  this.pointAvatars.push(base64);
+                  // this.pointAvatars.push(base64);
+                  this.$set(this.pointAvatars, idx, base64);
                 }
               });
           }else{
