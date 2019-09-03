@@ -29,7 +29,7 @@
               <stars :score="itm.averageScore"></stars>
             </span>
           </div>
-          <div class="right-sp" v-if="itm.distance">{{itm.distance}}m</div>
+          <div class="right-sp" v-if="itm.distance">{{itm.distance}}km</div>
         </div>
 
         <div class="point-addr" slot="content">
