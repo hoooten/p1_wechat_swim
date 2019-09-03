@@ -17,7 +17,7 @@
       </div>
       <div class="point-addr-bar">
         <template v-if="point.distance">
-          <span>{{point.distance}}m</span>
+          <span>{{point.distance}}km</span>
           <span>|</span>
         </template>
         <span>{{point.address}}</span>

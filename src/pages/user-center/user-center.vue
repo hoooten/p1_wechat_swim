@@ -151,7 +151,7 @@
     methods: {
       getUserData(){
         this.$vux.loading.show();
-        this.$api.getUserInfo({id: window.localStorage.getItem('user_id')})
+        this.$api.getUserInfo({id: window.localStorage.getItem('user_openidnn')})
           .then(resp => {
             if(resp.success){
               this.userInfo = resp.result;

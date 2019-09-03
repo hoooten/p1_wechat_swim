@@ -1,5 +1,5 @@
 'use strict'
 module.exports = {
   NODE_ENV: '"production"',
-  API_HOST: '"http://www.hoooten.com:22743/api/"',
+  API_HOST: '"http://www.hhaosport.vip:22743/api/"',
 };

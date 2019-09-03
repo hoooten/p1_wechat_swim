@@ -12,7 +12,7 @@ export class ApiService{
 
   /** 获取公众号配置信息 */
   getWechatConfig(params = {}){
-    const mUrl = 'http://www.hoooten.com:22743/WechatUi/UsingGetJSSDKJson';
+    const mUrl = 'http://www.hhaosport.vip:22743/WechatUi/UsingGetJSSDKJson';
 
     return getWechatConfig(mUrl, params);
   }
@@ -367,7 +367,7 @@ function doDelete(mUrl, query) {
 
 /** 图片上传 */
 function imageUpload(formData) {
-  const uploadUrl = 'http://www.hoooten.com:22743/File/UploadFiles';
+  const uploadUrl = 'http://www.hhaosport.vip:22743/File/UploadFiles';
   const head = {
     'Content-Type': 'multipart/form-data',
   };
@@ -393,7 +393,7 @@ function imageUpload(formData) {
 
 /** 图片下载 */
 function downloadImage(params) {
-  const downloadUrl = 'http://www.hoooten.com:22743/File/DownloadImg';
+  const downloadUrl = 'http://www.hhaosport.vip:22743/File/DownloadImg';
 
   return axios.get(downloadUrl, {params: params}).then(resolve => {
     const resp = resolve.data;
@@ -416,7 +416,7 @@ function downloadImage(params) {
 
 /** 删除图片 */
 function deleteImage(params) {
-  const deleteUrl = 'http://www.hoooten.com:22743/File/DeleteFile';
+  const deleteUrl = 'http://www.hhaosport.vip:22743/File/DeleteFile';
   const head = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${window.localStorage.getItem('token')}`,

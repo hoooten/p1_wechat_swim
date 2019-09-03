@@ -95,7 +95,7 @@ export const WxUtil = {
           .then(resp => {
             if(resp.success){
               window.localStorage.setItem('token', resp.result.accessToken);
-              window.localStorage.setItem('user_id', resp.result.userId);
+              window.localStorage.setItem('user_openidnn', resp.result.userId);
               window.localStorage.setItem('head_img', resp.result.headimgurl);
               window.localStorage.setItem('nick_name', resp.result.nickname);
             }
@@ -111,7 +111,7 @@ export const WxUtil = {
   /** 微信登录 */
   getCodeFromUrl(callback = function(){}){
     const code = Utils.getUserCode();
-    const userId = window.localStorage.getItem('user_id') || 0;
+    const userId = window.localStorage.getItem('user_openidnn') || 0;
 
     // 存在userId，证明用户已授权登录过公众号
     if(userId && +userId > 0){
