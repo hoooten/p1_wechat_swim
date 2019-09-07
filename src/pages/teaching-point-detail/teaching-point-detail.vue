@@ -34,15 +34,15 @@
         </div>
         <div class="oper-item">
           <img src="/static/images/guide-flag.png">
-          <span>导航</span>
+          <span  @click="onShowMap(point.lat, point.lon, point.address)">导航</span>
         </div>
-        <div class="oper-item">
+        <!-- <div class="oper-item">
           <img src="/static/images/shared-flag.png">
           <span>分享</span>
-        </div>
+        </div> -->
         <div class="oper-item">
           <img src="/static/images/phone-flag.png">
-          <span>电话</span>
+          <span><a :href="'tel:' + point.tel">电话</a></span>
         </div>
       </div>
     </div>
@@ -176,6 +176,7 @@
 <script>
   import {Cell, Group, Previewer, TransferDom, XButton} from 'vux';
   import {StarComment, Stars} from '@/components';
+  import {WxUtil} from "@/utils/wx-util";
 
   // const FLOAT_TEMPLATE = ['江', '河', '湖', '海'];
   // const POOL_TYPE = ['室内泳池', '露天游泳池'];
@@ -232,6 +233,11 @@
       this.getPointData();
     },
     methods: {
+      /** 显示地图 */
+      onShowMap(lat, lon, addr){
+        WxUtil.openMap(lat, lon, addr);
+      },
+
       getPointData(){
         const params = {
           id: this.id,

@@ -199,8 +199,12 @@
 
       /** 初始化高德地图 */
       initGaodeMap(){
+        let lat = window.localStorage.getItem('lat') || '';
+        let lon = window.localStorage.getItem('lon') || '';
+
         const map = new AMap.Map('gaodeMap', {
-          center: [this.latAndLons[0].lon, this.latAndLons[0].lat],
+          //center: [this.latAndLons[0].lon, this.latAndLons[0].lat],
+          center: [lon, lat],
           zoom: 10,
         });
 
